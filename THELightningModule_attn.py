@@ -18,7 +18,7 @@ from evoformer import Evoformer
 
 class THELightningModule(pl.LightningModule):
 
-    def __init__(self, lr, epochs, patience, in_size, hidden_size, num_layers, embedding_dim, heads, evoformer_blocks):
+    def __init__(self, lr=1e-4, epochs=100, patience=30, in_size=500, hidden_size=128, num_layers=3, embedding_dim=256, heads=8, evoformer_blocks=8):
         super().__init__()
         #constructor
 
@@ -74,7 +74,6 @@ class THELightningModule(pl.LightningModule):
         #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
 
         return self.fc4(x[:,0]) # take the first row # torch.Size([B x S x F])
-
 
     def cross_entropy_loss(self, logits, labels):
         return F.cross_entropy(logits, labels)
@@ -134,9 +133,9 @@ def main():
     parser.add_argument("--in_size", type=int, default=500)
     parser.add_argument("--hidden_size", type=int, default=128)
     parser.add_argument("--num_layers", type=int, default=3)
-    parser.add_argument("--embedding_dim", type=int, default=64)
+    parser.add_argument("--embedding_dim", type=int, default=256)
     parser.add_argument("--heads", type=int, default=8)
-    parser.add_argument("--evoformer_blocks", type=int, default=4)
+    parser.add_argument("--evoformer_blocks", type=int, default=8)
 
     
     parser = pl.Trainer.add_argparse_args(parser)
