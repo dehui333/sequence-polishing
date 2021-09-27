@@ -68,12 +68,12 @@ class THELightningModule(pl.LightningModule):
         x = self.evoformer(x)
         #print("x after axial attention size: ", x.size()) # torch.Size([128, 200, 90, 64]) B,R,S,embd
 
-        x = x.permute((0, 2, 3, 1))
+        #x = x.permute((0, 2, 3, 1))
         #print("x after permute size: ", x.size()) # torch.Size([128, 90, 64, 200]) B,S,embd,R
 
         #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
 
-        return self.fc4(x[:,:,:,0]) # take the first row
+        return self.fc4(x[:,0]) # take the first row # torch.Size([B x S x F])
 
 
     def cross_entropy_loss(self, logits, labels):
