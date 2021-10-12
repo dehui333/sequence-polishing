@@ -1,0 +1,430 @@
+
+initializing ddp: GLOBAL_RANK: 1, MEMBER: 2/4
+initializing ddp: GLOBAL_RANK: 2, MEMBER: 3/4
+initializing ddp: GLOBAL_RANK: 0, MEMBER: 1/4
+initializing ddp: GLOBAL_RANK: 3, MEMBER: 4/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All DDP processes registered. Starting ddp with 4 processes
+----------------------------------------------------------------------------------------------------
+941fcf3bfd54:31340:31340 [4] NCCL INFO Bootstrap : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31340:31340 [4] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+941fcf3bfd54:31340:31340 [4] misc/ibvwrap.cc:63 NCCL WARN Failed to open libibverbs.so[.1]
+941fcf3bfd54:31340:31340 [4] NCCL INFO NET/Socket : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31340:31340 [4] NCCL INFO Using network Socket
+NCCL version 2.7.8+cuda11.1
+941fcf3bfd54:31386:31386 [6] NCCL INFO Bootstrap : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31386:31386 [6] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+941fcf3bfd54:31386:31386 [6] misc/ibvwrap.cc:63 NCCL WARN Failed to open libibverbs.so[.1]
+941fcf3bfd54:31386:31386 [6] NCCL INFO NET/Socket : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31386:31386 [6] NCCL INFO Using network Socket
+941fcf3bfd54:31381:31381 [5] NCCL INFO Bootstrap : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31381:31381 [5] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+941fcf3bfd54:31381:31381 [5] misc/ibvwrap.cc:63 NCCL WARN Failed to open libibverbs.so[.1]
+941fcf3bfd54:31381:31381 [5] NCCL INFO NET/Socket : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31381:31381 [5] NCCL INFO Using network Socket
+941fcf3bfd54:31387:31387 [7] NCCL INFO Bootstrap : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31387:31387 [7] NCCL INFO NET/Plugin : No plugin found (libnccl-net.so), using internal implementation
+941fcf3bfd54:31387:31387 [7] misc/ibvwrap.cc:63 NCCL WARN Failed to open libibverbs.so[.1]
+941fcf3bfd54:31387:31387 [7] NCCL INFO NET/Socket : Using [0]eth0:172.17.0.9<0>
+941fcf3bfd54:31387:31387 [7] NCCL INFO Using network Socket
+941fcf3bfd54:31381:31412 [5] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 8/8/64
+941fcf3bfd54:31381:31412 [5] NCCL INFO Trees [0] -1/-1/-1->1->2|2->1->-1/-1/-1 [1] 2/-1/-1->1->-1|-1->1->2/-1/-1 [2] -1/-1/-1->1->2|2->1->-1/-1/-1 [3] 2/-1/-1->1->-1|-1->1->2/-1/-1 [4] -1/-1/-1->1->2|2->1->-1/-1/-1 [5] 2/-1/-1->1->-1|-1->1->2/-1/-1 [6] -1/-1/-1->1->2|2->1->-1/-1/-1 [7] 2/-1/-1->1->-1|-1->1->2/-1/-1
+941fcf3bfd54:31381:31412 [5] NCCL INFO Setting affinity for GPU 5 to ffff,f00000ff,fff00000
+941fcf3bfd54:31386:31411 [6] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 8/8/64
+941fcf3bfd54:31386:31411 [6] NCCL INFO Trees [0] 1/-1/-1->2->3|3->2->1/-1/-1 [1] 3/-1/-1->2->1|1->2->3/-1/-1 [2] 1/-1/-1->2->3|3->2->1/-1/-1 [3] 3/-1/-1->2->1|1->2->3/-1/-1 [4] 1/-1/-1->2->3|3->2->1/-1/-1 [5] 3/-1/-1->2->1|1->2->3/-1/-1 [6] 1/-1/-1->2->3|3->2->1/-1/-1 [7] 3/-1/-1->2->1|1->2->3/-1/-1
+941fcf3bfd54:31387:31413 [7] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 8/8/64
+941fcf3bfd54:31386:31411 [6] NCCL INFO Setting affinity for GPU 6 to ffff,f00000ff,fff00000
+941fcf3bfd54:31387:31413 [7] NCCL INFO Trees [0] 2/-1/-1->3->0|0->3->2/-1/-1 [1] 0/-1/-1->3->2|2->3->0/-1/-1 [2] 2/-1/-1->3->0|0->3->2/-1/-1 [3] 0/-1/-1->3->2|2->3->0/-1/-1 [4] 2/-1/-1->3->0|0->3->2/-1/-1 [5] 0/-1/-1->3->2|2->3->0/-1/-1 [6] 2/-1/-1->3->0|0->3->2/-1/-1 [7] 0/-1/-1->3->2|2->3->0/-1/-1
+941fcf3bfd54:31387:31413 [7] NCCL INFO Setting affinity for GPU 7 to ffff,f00000ff,fff00000
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 00/08 :    0   1   2   3
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 01/08 :    0   3   2   1
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 02/08 :    0   3   1   2
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 03/08 :    0   2   1   3
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 04/08 :    0   1   2   3
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 05/08 :    0   3   2   1
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 06/08 :    0   3   1   2
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 07/08 :    0   2   1   3
+941fcf3bfd54:31340:31410 [4] NCCL INFO threadThresholds 8/8/64 | 32/8/64 | 8/8/64
+941fcf3bfd54:31340:31410 [4] NCCL INFO Trees [0] 3/-1/-1->0->-1|-1->0->3/-1/-1 [1] -1/-1/-1->0->3|3->0->-1/-1/-1 [2] 3/-1/-1->0->-1|-1->0->3/-1/-1 [3] -1/-1/-1->0->3|3->0->-1/-1/-1 [4] 3/-1/-1->0->-1|-1->0->3/-1/-1 [5] -1/-1/-1->0->3|3->0->-1/-1/-1 [6] 3/-1/-1->0->-1|-1->0->3/-1/-1 [7] -1/-1/-1->0->3|3->0->-1/-1/-1
+941fcf3bfd54:31340:31410 [4] NCCL INFO Setting affinity for GPU 4 to ffff,f00000ff,fff00000
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 00 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 00 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 00 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 00 : 0[85000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 00 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 00 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 00 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 01 : 1[86000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 01 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 01 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 01 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 01 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 01 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 01 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 02 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 02 : 2[89000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 02 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 02 : 3[8a000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 02 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 02 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 02 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 03 : 0[85000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 02 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 03 : 1[86000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 03 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 03 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 03 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 03 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 03 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 04 : 0[85000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 03 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 04 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 04 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 04 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 04 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 04 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 04 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 05 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 05 : 1[86000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 05 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 05 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 05 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 05 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 05 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 06 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 06 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 06 : 2[89000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 06 : 3[8a000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 06 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 06 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 06 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 07 : 0[85000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 06 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 07 : 1[86000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 07 : 2[89000] -> 1[86000] via P2P/IPC
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 07 : 3[8a000] -> 0[85000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO Channel 07 : 1[86000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO Channel 07 : 0[85000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31340:31410 [4] NCCL INFO 8 coll channels, 8 p2p channels, 2 p2p channels per peer
+941fcf3bfd54:31387:31413 [7] NCCL INFO Channel 07 : 3[8a000] -> 2[89000] via P2P/IPC
+941fcf3bfd54:31381:31412 [5] NCCL INFO 8 coll channels, 8 p2p channels, 2 p2p channels per peer
+941fcf3bfd54:31386:31411 [6] NCCL INFO Channel 07 : 2[89000] -> 3[8a000] via P2P/IPC
+941fcf3bfd54:31386:31411 [6] NCCL INFO 8 coll channels, 8 p2p channels, 2 p2p channels per peer
+941fcf3bfd54:31386:31411 [6] NCCL INFO comm 0x7f84b8002e10 rank 2 nranks 4 cudaDev 6 busId 89000 - Init COMPLETE
+941fcf3bfd54:31387:31413 [7] NCCL INFO 8 coll channels, 8 p2p channels, 2 p2p channels per peer
+941fcf3bfd54:31340:31410 [4] NCCL INFO comm 0x7f8f90002e10 rank 0 nranks 4 cudaDev 4 busId 85000 - Init COMPLETE
+941fcf3bfd54:31340:31340 [4] NCCL INFO Launch mode Parallel
+941fcf3bfd54:31381:31412 [5] NCCL INFO comm 0x7f2c94002e10 rank 1 nranks 4 cudaDev 5 busId 86000 - Init COMPLETE
+941fcf3bfd54:31387:31413 [7] NCCL INFO comm 0x7f1c28002e10 rank 3 nranks 4 cudaDev 7 busId 8a000 - Init COMPLETE
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+  | Name           | Type      | Params
+---------------------------------------------
+0 | embedding      | Embedding | 3.1 K
+1 | do             | Dropout   | 0
+2 | evoformer      | Evoformer | 9.5 M
+3 | train_accuracy | Accuracy  | 0
+4 | val_accuracy   | Accuracy  | 0
+5 | fc4            | Linear    | 1.3 K
+---------------------------------------------
+9.5 M     Trainable params
+0         Non-trainable params
+9.5 M     Total params
+37.889    Total estimated model params size (MB)
+/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 80 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+Validation sanity check:   0%|                                                                                                                    | 0/2 [00:00<?, ?it/s]
+/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 80 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+
+Epoch 0:   0%|                                                                                                                       | 0/8936 [00:00<00:05, 1667.05it/s]
+Traceback (most recent call last):
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 168, in <module>
+    main()
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 164, in main
+    trainer.fit(model, datamodule=data)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 922, in _run
+    self._dispatch()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 990, in _dispatch
+    self.accelerator.start_training(self)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    self._results = trainer.run_stage()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1000, in run_stage
+    return self._run_train()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1049, in _run_train
+    self.fit_loop.run()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1616, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 206, in step
+    self.__optimizer_step(closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 128, in __optimizer_step
+    trainer.accelerator.optimizer_step(self._optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 296, in optimizer_step
+    self.run_optimizer_step(optimizer, opt_idx, lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 303, in run_optimizer_step
+    self.training_type_plugin.optimizer_step(optimizer, lambda_closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 226, in optimizer_step
+    optimizer.step(closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/optimizer.py", line 88, in wrapper
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/grad_mode.py", line 28, in decorate_context
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/adam.py", line 66, in step
+    loss = closure()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 548, in training_step_and_backward
+    self.backward(result, optimizer, opt_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 589, in backward
+    result.closure_loss = self.trainer.accelerator.backward(result.closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 276, in backward
+    self.precision_plugin.backward(self.lightning_module, closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py", line 78, in backward
+    model.backward(closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1479, in backward
+    loss.backward(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/_tensor.py", line 255, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/__init__.py", line 147, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 1.10 GiB (GPU 6; 31.72 GiB total capacity; 26.88 GiB already allocated; 770.88 MiB free; 26.88 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 168, in <module>
+    main()
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 164, in main
+    trainer.fit(model, datamodule=data)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 922, in _run
+    self._dispatch()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 990, in _dispatch
+    self.accelerator.start_training(self)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    self._results = trainer.run_stage()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1000, in run_stage
+    return self._run_train()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1049, in _run_train
+    self.fit_loop.run()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1616, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 206, in step
+    self.__optimizer_step(closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 128, in __optimizer_step
+    trainer.accelerator.optimizer_step(self._optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 296, in optimizer_step
+    self.run_optimizer_step(optimizer, opt_idx, lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 303, in run_optimizer_step
+    self.training_type_plugin.optimizer_step(optimizer, lambda_closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 226, in optimizer_step
+    optimizer.step(closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/optimizer.py", line 88, in wrapper
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/grad_mode.py", line 28, in decorate_context
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/adam.py", line 66, in step
+    loss = closure()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 548, in training_step_and_backward
+    self.backward(result, optimizer, opt_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 589, in backward
+    result.closure_loss = self.trainer.accelerator.backward(result.closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 276, in backward
+    self.precision_plugin.backward(self.lightning_module, closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py", line 78, in backward
+    model.backward(closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1479, in backward
+    loss.backward(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/_tensor.py", line 255, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/__init__.py", line 147, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 1.10 GiB (GPU 7; 31.72 GiB total capacity; 26.88 GiB already allocated; 770.88 MiB free; 26.88 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 168, in <module>
+    main()
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 164, in main
+    trainer.fit(model, datamodule=data)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 922, in _run
+    self._dispatch()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 990, in _dispatch
+    self.accelerator.start_training(self)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    self._results = trainer.run_stage()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1000, in run_stage
+    return self._run_train()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1049, in _run_train
+    self.fit_loop.run()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1616, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 206, in step
+    self.__optimizer_step(closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 128, in __optimizer_step
+    trainer.accelerator.optimizer_step(self._optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 296, in optimizer_step
+    self.run_optimizer_step(optimizer, opt_idx, lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 303, in run_optimizer_step
+    self.training_type_plugin.optimizer_step(optimizer, lambda_closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 226, in optimizer_step
+    optimizer.step(closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/optimizer.py", line 88, in wrapper
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/grad_mode.py", line 28, in decorate_context
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/adam.py", line 66, in step
+    loss = closure()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 548, in training_step_and_backward
+    self.backward(result, optimizer, opt_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 589, in backward
+    result.closure_loss = self.trainer.accelerator.backward(result.closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 276, in backward
+    self.precision_plugin.backward(self.lightning_module, closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py", line 78, in backward
+    model.backward(closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1479, in backward
+    loss.backward(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/_tensor.py", line 255, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/__init__.py", line 147, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 1.10 GiB (GPU 4; 31.72 GiB total capacity; 26.88 GiB already allocated; 914.88 MiB free; 26.88 GiB reserved in total by PyTorch)
+Traceback (most recent call last):
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 168, in <module>
+    main()
+  File "/scratch/roko/roko/multimodule_attn_tryitout.py", line 164, in main
+    trainer.fit(model, datamodule=data)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 552, in fit
+    self._run(model)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 922, in _run
+    self._dispatch()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 990, in _dispatch
+    self.accelerator.start_training(self)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 92, in start_training
+    self.training_type_plugin.start_training(trainer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 161, in start_training
+    self._results = trainer.run_stage()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1000, in run_stage
+    return self._run_train()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/trainer.py", line 1049, in _run_train
+    self.fit_loop.run()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/fit_loop.py", line 200, in advance
+    epoch_output = self.epoch_loop.run(train_dataloader)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/epoch/training_epoch_loop.py", line 130, in advance
+    batch_output = self.batch_loop.run(batch, self.iteration_count, self._dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 100, in run
+    super().run(batch, batch_idx, dataloader_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/base.py", line 111, in run
+    self.advance(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 147, in advance
+    result = self._run_optimization(batch_idx, split_batch, opt_idx, optimizer)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 201, in _run_optimization
+    self._optimizer_step(optimizer, opt_idx, batch_idx, closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 395, in _optimizer_step
+    model_ref.optimizer_step(
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1616, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 206, in step
+    self.__optimizer_step(closure=closure, profiler_name=profiler_name, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/optimizer.py", line 128, in __optimizer_step
+    trainer.accelerator.optimizer_step(self._optimizer, self._optimizer_idx, lambda_closure=closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 296, in optimizer_step
+    self.run_optimizer_step(optimizer, opt_idx, lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 303, in run_optimizer_step
+    self.training_type_plugin.optimizer_step(optimizer, lambda_closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/training_type/training_type_plugin.py", line 226, in optimizer_step
+    optimizer.step(closure=lambda_closure, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/optimizer.py", line 88, in wrapper
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/grad_mode.py", line 28, in decorate_context
+    return func(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/optim/adam.py", line 66, in step
+    loss = closure()
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 235, in _training_step_and_backward_closure
+    result = self.training_step_and_backward(split_batch, batch_idx, opt_idx, optimizer, hiddens)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 548, in training_step_and_backward
+    self.backward(result, optimizer, opt_idx)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/loops/batch/training_batch_loop.py", line 589, in backward
+    result.closure_loss = self.trainer.accelerator.backward(result.closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/accelerators/accelerator.py", line 276, in backward
+    self.precision_plugin.backward(self.lightning_module, closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/plugins/precision/precision_plugin.py", line 78, in backward
+    model.backward(closure_loss, optimizer, *args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/core/lightning.py", line 1479, in backward
+    loss.backward(*args, **kwargs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/_tensor.py", line 255, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/torch/autograd/__init__.py", line 147, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 1.10 GiB (GPU 5; 31.72 GiB total capacity; 26.88 GiB already allocated; 914.88 MiB free; 26.88 GiB reserved in total by PyTorch)

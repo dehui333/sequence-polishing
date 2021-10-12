@@ -5,13 +5,13 @@ import h5py
 import numpy as np
 import pytorch_lightning as pl
 from datasets import TrainDataset, InMemoryTrainDataset, TrainToTensor
-from inference import InferenceDataset, ToTensor
+#from inference import InferenceDataset, ToTensor
 from torch.utils.data import Dataset, DataLoader
 
 
 #DATAModule
-#prepare_data (how to download(), tokenize, etc…)
-#setup (how to split, etc…)
+#prepare_data (how to download(), tokenize, etc)
+#setup (how to split, etc)
 #train_dataloader
 #val_dataloader(s)
 #test_dataloader(s)
@@ -49,4 +49,3 @@ class THEDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         pass
         #return DataLoader(self.test_ds, self.batch_size, shuffle=False, num_workers= self.workers)
-

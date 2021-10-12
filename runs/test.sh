@@ -1,0 +1,1 @@
+python -u /scratch/roko/roko/inference.py /scratch/roko_features/sa/sa_test.hdf5 /scratch/model/sample-val_acc_batch=1.00.ckpt /scratch/outputs/test_output.fasta --t 32 > test_output.txt

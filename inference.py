@@ -6,9 +6,9 @@ from collections import defaultdict, Counter
 import argparse
 from torch.utils.data import Dataset, DataLoader
 import itertools
-from rnn_model import *
+#from rnn_model import *
 import numpy as np
-#from THELightningModule import THELightningModule
+from multimodule_attn_tryitout import THELightningModule
 
 GPU_NUM = 1
 
@@ -165,7 +165,7 @@ def main():
     parser.add_argument('model', type=str)
     parser.add_argument('out', type=str)
     parser.add_argument('--t', type=int, default=0)
-    parser.add_argument('--b', type=int, default=128)
+    parser.add_argument('--b', type=int, default=32)
     args = parser.parse_args()
 
     infer(args.data, args.model, args.out, args.t, args.b)
