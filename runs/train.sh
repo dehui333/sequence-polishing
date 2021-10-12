@@ -1,1 +1,1 @@
-NCCL_DEBUG=INFO python -u /scratch/roko/roko/multimodule_attn_tryitout.py /scratch/roko_features/ec/ec_p1.hdf5 /scratch/model --valpath /scratch/roko_features/lm/lm_p1.hdf5 > output.txt
+NCCL_DEBUG=INFO python -u /scratch/roko/roko/multimodule_attn_tryitout.py /scratch/roko_features/ec/ec_p1.hdf5 /scratch/model --valpath /scratch/roko_features/lm/lm_p1.hdf5 > train_output.txt
