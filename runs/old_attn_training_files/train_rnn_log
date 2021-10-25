@@ -1,0 +1,211 @@
+nohup: ignoring input
+GPU available: True, used: True
+TPU available: False, using: 0 TPU cores
+IPU available: False, using: 0 IPUs
+wandb: Currently logged in as: ws500981 (use `wandb login --relogin` to force relogin)
+wandb: wandb version 0.12.4 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.12.1
+wandb: Syncing run fanciful-snow-57
+wandb:  View project at https://wandb.ai/ws500981/roko
+wandb:  View run at https://wandb.ai/ws500981/roko/runs/28mt8xqe
+wandb: Run data is saved locally in /scratch/roko/sequence-polishing/runs/wandb/run-20211018_041756-28mt8xqe
+wandb: Run `wandb offline` to turn off syncing.
+initializing ddp: GLOBAL_RANK: 1, MEMBER: 2/4
+initializing ddp: GLOBAL_RANK: 2, MEMBER: 3/4
+initializing ddp: GLOBAL_RANK: 3, MEMBER: 4/4
+initializing ddp: GLOBAL_RANK: 0, MEMBER: 1/4
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All DDP processes registered. Starting ddp with 4 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+
+  | Name           | Type      | Params
+---------------------------------------------
+0 | embedding      | Embedding | 600   
+1 | do             | Dropout   | 0     
+2 | fc1            | Linear    | 20.1 K
+3 | do1            | Dropout   | 0     
+4 | fc2            | Linear    | 1.0 K 
+5 | do2            | Dropout   | 0     
+6 | train_accuracy | Accuracy  | 0     
+7 | val_accuracy   | Accuracy  | 0     
+8 | gru            | GRU       | 1.1 M 
+9 | fc4            | Linear    | 1.3 K 
+---------------------------------------------
+1.1 M     Trainable params
+0         Non-trainable params
+1.1 M     Total params
+4.399     Total estimated model params size (MB)
+/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, val dataloader 0, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 80 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+/scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 80 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
+  rank_zero_warn(
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[W reducer.cpp:1158] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+wandb: Waiting for W&B process to finish, PID 32287
+wandb: Program ended successfully.
+wandb: - 12.61MB of 12.61MB uploaded (0.00MB deduped)wandb: \ 12.61MB of 12.61MB uploaded (0.00MB deduped)wandb: | 12.61MB of 12.61MB uploaded (0.00MB deduped)wandb: / 12.61MB of 12.69MB uploaded (0.00MB deduped)wandb: - 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.61MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.78MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: \ 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: | 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: / 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb: - 12.79MB of 12.79MB uploaded (0.00MB deduped)wandb:                                                                                
+wandb: Find user logs for this run at: /scratch/roko/sequence-polishing/runs/wandb/run-20211018_041756-28mt8xqe/logs/debug.log
+wandb: Find internal logs for this run at: /scratch/roko/sequence-polishing/runs/wandb/run-20211018_041756-28mt8xqe/logs/debug-internal.log
+wandb: Run summary:
+wandb:                                     train_loss 0.0022
+wandb:            grad_2.0_norm_embedding.weight_step 0.0005
+wandb:                  grad_2.0_norm_fc1.weight_step 0.0012
+wandb:                    grad_2.0_norm_fc1.bias_step 0.0001
+wandb:                  grad_2.0_norm_fc2.weight_step 0.0014
+wandb:                    grad_2.0_norm_fc2.bias_step 0.0002
+wandb:            grad_2.0_norm_gru.weight_ih_l0_step 0.0019
+wandb:            grad_2.0_norm_gru.weight_hh_l0_step 0.0003
+wandb:              grad_2.0_norm_gru.bias_ih_l0_step 0.0
+wandb:              grad_2.0_norm_gru.bias_hh_l0_step 0.0
+wandb:    grad_2.0_norm_gru.weight_ih_l0_reverse_step 0.002
+wandb:    grad_2.0_norm_gru.weight_hh_l0_reverse_step 0.0003
+wandb:      grad_2.0_norm_gru.bias_ih_l0_reverse_step 0.0001
+wandb:      grad_2.0_norm_gru.bias_hh_l0_reverse_step 0.0
+wandb:            grad_2.0_norm_gru.weight_ih_l1_step 0.0006
+wandb:            grad_2.0_norm_gru.weight_hh_l1_step 0.0002
+wandb:              grad_2.0_norm_gru.bias_ih_l1_step 0.0
+wandb:              grad_2.0_norm_gru.bias_hh_l1_step 0.0
+wandb:    grad_2.0_norm_gru.weight_ih_l1_reverse_step 0.0006
+wandb:    grad_2.0_norm_gru.weight_hh_l1_reverse_step 0.0003
+wandb:      grad_2.0_norm_gru.bias_ih_l1_reverse_step 0.0
+wandb:      grad_2.0_norm_gru.bias_hh_l1_reverse_step 0.0
+wandb:            grad_2.0_norm_gru.weight_ih_l2_step 0.0004
+wandb:            grad_2.0_norm_gru.weight_hh_l2_step 0.0001
+wandb:              grad_2.0_norm_gru.bias_ih_l2_step 0.0
+wandb:              grad_2.0_norm_gru.bias_hh_l2_step 0.0
+wandb:    grad_2.0_norm_gru.weight_ih_l2_reverse_step 0.0004
+wandb:    grad_2.0_norm_gru.weight_hh_l2_reverse_step 0.0002
+wandb:      grad_2.0_norm_gru.bias_ih_l2_reverse_step 0.0
+wandb:      grad_2.0_norm_gru.bias_hh_l2_reverse_step 0.0
+wandb:                  grad_2.0_norm_fc4.weight_step 0.0012
+wandb:                    grad_2.0_norm_fc4.bias_step 0.0001
+wandb:                       grad_2.0_norm_total_step 0.0038
+wandb:                                          epoch 30
+wandb:                            trainer/global_step 3099
+wandb:                                       _runtime 1997
+wandb:                                     _timestamp 1634532673
+wandb:                                          _step 123
+wandb:                                  val_acc_batch 0.99965
+wandb:                                 val_loss_batch 0.00353
+wandb:                                  val_acc_epoch 0.99905
+wandb:           grad_2.0_norm_embedding.weight_epoch 0.00441
+wandb:                 grad_2.0_norm_fc1.weight_epoch 0.051
+wandb:                   grad_2.0_norm_fc1.bias_epoch 0.00433
+wandb:                 grad_2.0_norm_fc2.weight_epoch 0.0789
+wandb:                   grad_2.0_norm_fc2.bias_epoch 0.01039
+wandb:           grad_2.0_norm_gru.weight_ih_l0_epoch 0.03823
+wandb:           grad_2.0_norm_gru.weight_hh_l0_epoch 0.00872
+wandb:             grad_2.0_norm_gru.bias_ih_l0_epoch 0.00185
+wandb:             grad_2.0_norm_gru.bias_hh_l0_epoch 0.00128
+wandb:   grad_2.0_norm_gru.weight_ih_l0_reverse_epoch 0.0393
+wandb:   grad_2.0_norm_gru.weight_hh_l0_reverse_epoch 0.0093
+wandb:     grad_2.0_norm_gru.bias_ih_l0_reverse_epoch 0.002
+wandb:     grad_2.0_norm_gru.bias_hh_l0_reverse_epoch 0.00136
+wandb:           grad_2.0_norm_gru.weight_ih_l1_epoch 0.06091
+wandb:           grad_2.0_norm_gru.weight_hh_l1_epoch 0.01657
+wandb:             grad_2.0_norm_gru.bias_ih_l1_epoch 0.00321
+wandb:             grad_2.0_norm_gru.bias_hh_l1_epoch 0.00234
+wandb:   grad_2.0_norm_gru.weight_ih_l1_reverse_epoch 0.06463
+wandb:   grad_2.0_norm_gru.weight_hh_l1_reverse_epoch 0.02065
+wandb:     grad_2.0_norm_gru.bias_ih_l1_reverse_epoch 0.00394
+wandb:     grad_2.0_norm_gru.bias_hh_l1_reverse_epoch 0.00291
+wandb:           grad_2.0_norm_gru.weight_ih_l2_epoch 0.10124
+wandb:           grad_2.0_norm_gru.weight_hh_l2_epoch 0.02343
+wandb:             grad_2.0_norm_gru.bias_ih_l2_epoch 0.00528
+wandb:             grad_2.0_norm_gru.bias_hh_l2_epoch 0.00336
+wandb:   grad_2.0_norm_gru.weight_ih_l2_reverse_epoch 0.1232
+wandb:   grad_2.0_norm_gru.weight_hh_l2_reverse_epoch 0.02852
+wandb:     grad_2.0_norm_gru.bias_ih_l2_reverse_epoch 0.00669
+wandb:     grad_2.0_norm_gru.bias_hh_l2_reverse_epoch 0.00428
+wandb:                 grad_2.0_norm_fc4.weight_epoch 0.40532
+wandb:                   grad_2.0_norm_fc4.bias_epoch 0.0113
+wandb:                      grad_2.0_norm_total_epoch 0.47153
+wandb:                                Train_acc_epoch 0.98791
+wandb: Run history:
+wandb:                                     train_loss █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_embedding.weight_step █▅▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                  grad_2.0_norm_fc1.weight_step █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                    grad_2.0_norm_fc1.bias_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                  grad_2.0_norm_fc2.weight_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                    grad_2.0_norm_fc2.bias_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_ih_l0_step █▄▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_hh_l0_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_ih_l0_step █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_hh_l0_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_ih_l0_reverse_step █▄▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_hh_l0_reverse_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_ih_l0_reverse_step █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_hh_l0_reverse_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_ih_l1_step ▇█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_hh_l1_step ██▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_ih_l1_step █▇▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_hh_l1_step ▇█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_ih_l1_reverse_step ██▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_hh_l1_reverse_step █▆▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_ih_l1_reverse_step █▆▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_hh_l1_reverse_step █▇▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_ih_l2_step ▅█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:            grad_2.0_norm_gru.weight_hh_l2_step ▆█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_ih_l2_step ▆█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:              grad_2.0_norm_gru.bias_hh_l2_step ▅█▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_ih_l2_reverse_step ▆█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:    grad_2.0_norm_gru.weight_hh_l2_reverse_step ██▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_ih_l2_reverse_step ██▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      grad_2.0_norm_gru.bias_hh_l2_reverse_step ▇█▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                  grad_2.0_norm_fc4.weight_step ▅█▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                    grad_2.0_norm_fc4.bias_step █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                       grad_2.0_norm_total_step ▅█▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                                          epoch ▁▁▁▁▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇████
+wandb:                            trainer/global_step ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇████
+wandb:                                       _runtime ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
+wandb:                                     _timestamp ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
+wandb:                                          _step ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
+wandb:                                  val_acc_batch ▁▅▆▆▇▇▇▇▇▇█████████████████████
+wandb:                                 val_loss_batch █▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                                  val_acc_epoch ▁▅▆▆▇▇▇▇▇▇█████████████████████
+wandb:           grad_2.0_norm_embedding.weight_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                 grad_2.0_norm_fc1.weight_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                   grad_2.0_norm_fc1.bias_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                 grad_2.0_norm_fc2.weight_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                   grad_2.0_norm_fc2.bias_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_ih_l0_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_hh_l0_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_ih_l0_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_hh_l0_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_ih_l0_reverse_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_hh_l0_reverse_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_ih_l0_reverse_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_hh_l0_reverse_epoch █▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_ih_l1_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_hh_l1_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_ih_l1_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_hh_l1_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_ih_l1_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_hh_l1_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_ih_l1_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_hh_l1_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_ih_l2_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:           grad_2.0_norm_gru.weight_hh_l2_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_ih_l2_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             grad_2.0_norm_gru.bias_hh_l2_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_ih_l2_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:   grad_2.0_norm_gru.weight_hh_l2_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_ih_l2_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:     grad_2.0_norm_gru.bias_hh_l2_reverse_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                 grad_2.0_norm_fc4.weight_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                   grad_2.0_norm_fc4.bias_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                      grad_2.0_norm_total_epoch █▃▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:                                Train_acc_epoch ▁▅▆▆▇▇▇▇▇██████████████████████
+wandb: 
+wandb: Synced 5 W&B file(s), 0 media file(s), 1 artifact file(s) and 0 other file(s)
+wandb: 
+wandb: Synced fanciful-snow-57: https://wandb.ai/ws500981/roko/runs/28mt8xqe

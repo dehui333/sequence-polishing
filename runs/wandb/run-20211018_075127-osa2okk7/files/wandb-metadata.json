@@ -1,0 +1,35 @@
+{
+    "os": "Linux-4.15.0-76-generic-x86_64-with-glibc2.31",
+    "python": "3.9.7",
+    "heartbeatAt": "2021-10-18T07:51:28.996530",
+    "startedAt": "2021-10-18T07:51:27.808630",
+    "docker": null,
+    "gpu": "Tesla V100-SXM2-32GB-LS",
+    "gpu_count": 8,
+    "cpu_count": 80,
+    "cuda": null,
+    "args": [
+        "/scratch/roko_features/ec/ec_p1.hdf5",
+        "/scratch/model/roko_rnn",
+        "--valpath",
+        "/scratch/roko_features/lm/lm_p1.hdf5",
+        "--embedding_dim",
+        "128",
+        "--b",
+        "32",
+        "--lr",
+        "5e-4"
+    ],
+    "state": "running",
+    "program": "/scratch/roko/sequence-polishing/multimodule_attn_tryitout.py",
+    "codePath": "multimodule_attn_tryitout.py",
+    "git": {
+        "remote": "https://github.com/ws500981/sequence-polishing.git",
+        "commit": "a430b65e0b16afb4b2a131b10c8d71ee6143ceea"
+    },
+    "email": "wwu009@e.ntu.edu.sg",
+    "root": "/scratch/roko/sequence-polishing",
+    "host": "941fcf3bfd54",
+    "username": "root",
+    "executable": "/scratch/miniconda3/envs/roko/bin/python"
+}

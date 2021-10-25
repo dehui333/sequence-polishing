@@ -1,0 +1,1721 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.12.1
+    framework: lightning
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    m:
+    - 1: trainer/global_step
+      6:
+      - 3
+    - 1: train_loss
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_embedding\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_row_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_row_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_col_att\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_col_att\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear1\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear1\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear2\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear2\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.layer_norm\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.layer_norm\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_fc4\.weight_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_fc4\.bias_step
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_total_step
+      5: 1
+      6:
+      - 1
+    - 1: epoch
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/fc4\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.7\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.6\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.5\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.4\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.3\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.2\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.1\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear2\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.linear1\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_transition\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_col_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.bias._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.bias.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/evoformer\.blocks\.0\.msa_row_att\.layer_norm\.bias.bins
+      5: 1
+      6:
+      - 1
+    - 1: gradients/embedding\.weight._type
+      5: 1
+      6:
+      - 1
+    - 1: gradients/embedding\.weight.values
+      5: 1
+      6:
+      - 1
+    - 1: gradients/embedding\.weight.bins
+      5: 1
+      6:
+      - 1
+    - 1: val_acc_batch
+      5: 1
+      6:
+      - 1
+    - 1: val_loss_batch
+      5: 1
+      6:
+      - 1
+    - 1: val_acc_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_embedding\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.0\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.1\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.2\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.3\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.4\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.5\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.6\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_row_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_row_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_col_att\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_col_att\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear1\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear1\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear2\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.linear2\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.layer_norm\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_evoformer\.blocks\.7\.msa_transition\.layer_norm\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_fc4\.weight_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_fc4\.bias_epoch
+      5: 1
+      6:
+      - 1
+    - 1: grad_2\.0_norm_total_epoch
+      5: 1
+      6:
+      - 1
+    - 1: Train_acc_epoch
+      5: 1
+      6:
+      - 1
+    python_version: 3.9.7
+    start_time: 1634543487
+    t:
+      1:
+      - 1
+      - 9
+      2:
+      - 1
+      - 9
+      3:
+      - 1
+      - 7
+      4: 3.9.7
+      5: 0.12.1
+      8:
+      - 5

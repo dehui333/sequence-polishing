@@ -12,7 +12,8 @@ def get_filenames(path):
         for f in os.listdir(path):
             if f.endswith('.hdf5'):
                 filenames.append(os.path.join(path, f))
-
+        for name in filenames:
+            print(name)
         return filenames
 
     return [path]

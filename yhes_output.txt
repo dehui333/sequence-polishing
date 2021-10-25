@@ -1,0 +1,5 @@
+Validation sanity check: 0it [00:00, ?it/s]Validation sanity check:   0%|          | 0/2 [00:00<?, ?it/s]x input size:  torch.Size([32, 200, 90])
+x input size:  torch.Size([32, 200, 90])
+x input size:  torch.Size([32, 200, 90])
+x input size:  torch.Size([32, 200, 90])
+                                                              
