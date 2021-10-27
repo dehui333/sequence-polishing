@@ -23,3 +23,6 @@ config: {}
 2021-10-20 09:47:13,717 INFO    MainThread:36668 [wandb_init.py:init():565] run started, returning control to user process
 2021-10-20 09:47:13,717 INFO    MainThread:36668 [wandb_watch.py:watch():43] Watching
 2021-10-20 09:47:29,811 INFO    MainThread:36668 [wandb_run.py:_config_callback():843] config_cb None None {}
+2021-10-26 01:54:16,558 INFO    MainThread:36668 [wandb_run.py:_atexit_cleanup():1571] got exitcode: 1
+2021-10-26 01:54:16,559 INFO    MainThread:36668 [wandb_run.py:_restore():1543] restore
+2021-10-26 01:54:18,668 INFO    MainThread:36668 [wandb_run.py:_restore():1543] restore

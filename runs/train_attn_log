@@ -8,15 +8,15 @@ wandb: Currently logged in as: ws500981 (use `wandb login --relogin` to force re
 wandb: wandb version 0.12.5 is available!  To upgrade, please run:
 wandb:  $ pip install wandb --upgrade
 wandb: Tracking run with wandb version 0.12.1
-wandb: Syncing run fancy-firebrand-11
+wandb: Syncing run lunar-vortex-15
 wandb:  View project at https://wandb.ai/ws500981/docker_roko
-wandb:  View run at https://wandb.ai/ws500981/docker_roko/runs/alwgqwtj
-wandb: Run data is saved locally in /scratch/roko/sequence-polishing/runs/wandb/run-20211020_094711-alwgqwtj
+wandb:  View run at https://wandb.ai/ws500981/docker_roko/runs/3t1fifwf
+wandb: Run data is saved locally in /scratch/sequence-polishing/runs/wandb/run-20211026_020704-3t1fifwf
 wandb: Run `wandb offline` to turn off syncing.
 initializing ddp: GLOBAL_RANK: 1, MEMBER: 2/4
 initializing ddp: GLOBAL_RANK: 2, MEMBER: 3/4
-initializing ddp: GLOBAL_RANK: 3, MEMBER: 4/4
 initializing ddp: GLOBAL_RANK: 0, MEMBER: 1/4
+initializing ddp: GLOBAL_RANK: 3, MEMBER: 4/4
 ----------------------------------------------------------------------------------------------------
 distributed_backend=nccl
 All DDP processes registered. Starting ddp with 4 processes
@@ -24,8 +24,8 @@ All DDP processes registered. Starting ddp with 4 processes
 
 LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 2 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
-LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
+LOCAL_RANK: 1 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
 
   | Name           | Type      | Params
 ---------------------------------------------
@@ -44,3 +44,9 @@ LOCAL_RANK: 3 - CUDA_VISIBLE_DEVICES: [0,1,2,3,4,5,6,7]
   rank_zero_warn(
 /scratch/miniconda3/envs/roko/lib/python3.9/site-packages/pytorch_lightning/trainer/data_loading.py:105: UserWarning: The dataloader, train dataloader, does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` (try 80 which is the number of cpus on this machine) in the `DataLoader` init to improve performance.
   rank_zero_warn(
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: Network error resolved after 0:02:06.124346, resuming normal operation.
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: Network error resolved after 0:02:11.547853, resuming normal operation.
+wandb: Network error (ReadTimeout), entering retry loop.
+[34m[1mwandb[0m: Network error resolved after 0:02:07.988258, resuming normal operation.

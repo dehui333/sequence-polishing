@@ -12,7 +12,7 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.init as init
 import math
-from pytorch_lightning.loggers import WandbLogger
+#from pytorch_lightning.loggers import WandbLogger
 from evoformer import Evoformer
 import sys
 
