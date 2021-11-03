@@ -64,10 +64,17 @@ class StorageDataset(Dataset):
         group = f[g]
 
         sample = self.get_sample(group, p)
-        if self.transform:
-            sample = self.transform(sample)
 
-        return sample
+        # permutate the order of the reads
+        perm = np.random.permutation(sample[0].shape[0])
+        perm = np.delete(perm, np.where(perm == 0))
+        perm = np.insert(perm, 0, 0)
+        tup = (sample[0][perm], sample[1])
+
+        if self.transform:
+            tup = self.transform(tup)
+            
+        return tup
 
     def __len__(self):
         return self.size

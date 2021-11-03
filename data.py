@@ -45,7 +45,7 @@ class Storage:
         group.attrs['size'] = len(self.pos)
 
         print(f'Writing to {group.name}')
-        group.create_dataset('examples', data=self.X, chunks=(1, 200, 90))
+        group.create_dataset('examples', data=self.X, chunks=(1, 128, 128))
 
     def clear(self):
         del self.pos[:]
