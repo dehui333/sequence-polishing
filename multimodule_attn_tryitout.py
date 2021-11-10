@@ -14,6 +14,7 @@ import torch.nn.init as init
 import math
 from pytorch_lightning.loggers import WandbLogger
 from evoformer import Evoformer
+import random
 
 
 class THELightningModule(pl.LightningModule):
@@ -38,8 +39,29 @@ class THELightningModule(pl.LightningModule):
         self.patience = patience
 
         self.fc4 = nn.Linear(embedding_dim, 5)
+        # to restore the mask
+        self.fc5 = nn.Linear(embedding_dim,12)
 
     def forward(self, x):
+        # generate a boolean mask
+        probs=torch.rand(x.size())
+        token = probs > 0.85
+        rand = probs > 0.9
+
+        # get indices of the masked bases
+        token_indices = (token == True).nonzero(as_tuple=False).numpy()
+        rand_indices = (rand == True).nonzero(as_tuple=False).numpy()
+
+        # save original values
+        x_before_masking = x[token].clone()
+
+        # apply masks
+        for tok_in in token_indices:
+            x[tok_in[0]][tok_in[1]][tok_in[2]] = torch.tensor([5]) if x[tok_in[0]][tok_in[1]][tok_in[2]] < 6 else torch.tensor([11])
+        for rand_in in rand_indices:
+            x[rand_in[0]][rand_in[1]][rand_in[2]] = torch.tensor([random.choice(range(0,6))]) if x[rand_in[0]][rand_in[1]][rand_in[2]] < 6 else torch.tensor([random.choice(range(6,12))])
+
+
         #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
 
         x = self.do(self.embedding(x))
@@ -53,7 +75,11 @@ class THELightningModule(pl.LightningModule):
 
         #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
 
-        return self.fc4(x[:,0]) # take the first row # torch.Size([B x S x F])
+        # take the first row and pass it to linear layer torch.Size([B x S x F])
+        # with masking: also return x[mask] after x is passed through attention layer
+        x_after_masking_attn = self.fc5(x)[token].clone()
+        return self.fc4(x[:,0]), x_before_masking, x_after_masking_attn
+
 
     def cross_entropy_loss(self, logits, labels):
         return F.cross_entropy(logits, labels)
@@ -61,12 +87,13 @@ class THELightningModule(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         x, y = batch
-        x = x.long()
-        #print("x input size: ", x.size())
-        #print("y input size: ", y.size())
-        logits = self.forward(x).transpose(1, 2)
-        #print("logits input size: ", logits.size())
-        loss = self.cross_entropy_loss(logits, y)
+        x = x.long() # x.size() = B R S, y.size() = B S
+
+        # forward function will return both predicted sequence and the bases before and after masking
+        logits, before_masking, after_masking = self.forward(x)
+        logits = logits.transpose(1,2) # logits = B C S
+
+        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(after_masking, before_masking)
         train_acc_batch = self.train_accuracy(logits, y)
         self.log('train_loss', loss)
         return loss
@@ -80,8 +107,9 @@ class THELightningModule(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         x = x.long()
-        logits = self.forward(x).transpose(1, 2)
-        loss = self.cross_entropy_loss(logits, y)
+        logits, before_masking, after_masking = self.forward(x)
+        logits = logits.transpose(1,2) # logits = B C S
+        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(after_masking, before_masking)
         val_acc_batch = self.val_accuracy(logits, y)
         self.log('val_acc_batch', val_acc_batch, prog_bar=True)
         self.log('val_loss_batch', loss, prog_bar=True)
