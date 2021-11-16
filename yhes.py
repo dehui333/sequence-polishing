@@ -39,6 +39,7 @@ class THELightningModule(pl.LightningModule):
         self.patience = patience
 
         self.fc4 = nn.Linear(embedding_dim, 5)
+        self.mask_proj = nn.Linear(embedding_dim, 12)
 
     def forward(self, x):
         #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
@@ -60,7 +61,7 @@ class THELightningModule(pl.LightningModule):
         #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
 
         # take the first row and pass it to linear layer torch.Size([B x S x F])
-        return self.fc4(x[:,0]), x
+        return self.fc4(x[:,0]), self.mask_proj(x)
 
     def cross_entropy_loss(self, logits, labels):
         return F.cross_entropy(logits, labels)
@@ -79,6 +80,8 @@ class THELightningModule(pl.LightningModule):
 
         # save original values
         before_masking = x[token].clone()
+        print("size before masking: ", before_masking.size()) # number of elements masked
+        print("the masked elements (before)", before_masking[3])
         print("before masking \n", x[1][0])
 
         # apply masks
@@ -88,10 +91,12 @@ class THELightningModule(pl.LightningModule):
         x[rand] = torch.randint(0, high = 6, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
         print("after rand masking \n", x[1][0])
 
-        logits, attn_out = self.forward(x)
-        logits = logits.transpose(1,2) # logits = B C S
-        after_masking = attn_out[token].clone()
-        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(after_masking, before_masking)
+        logits, attn_out = self.forward(x) # attn_out = B R S 12
+        logits = logits.transpose(1,2) # logits = B C S , y = B S
+        #after_masking = attn_out[token].clone()
+        print("size after forward function: ", attn_out[token].size()) # shoule be number of elements masked x 12
+        print("the masked elements (after forward)", attn_out[token][3])
+        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[token], before_masking)
         train_acc_batch = self.train_accuracy(logits, y)
         self.log('train_loss', loss)
         sys.exit()
@@ -156,7 +161,7 @@ def main():
     checkpoint_callback = ModelCheckpoint(monitor='val_acc_batch', dirpath=args.out, filename='sample-{val_acc_batch:.2f}')
     
     # initialize trainer
-    trainer = pl.Trainer.from_argparse_args(args, gpus=[7], accelerator="ddp", gradient_clip_val=1.0, callbacks=[early_stop_callback, checkpoint_callback])    
+    trainer = pl.Trainer.from_argparse_args(args, gpus=[7], strategy="ddp", gradient_clip_val=1.0, callbacks=[early_stop_callback, checkpoint_callback])    
     # data
     data = THEDataModule(args.datapath, args.b, args.memory, args.valpath, args.t)
 

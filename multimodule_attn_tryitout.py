@@ -38,6 +38,7 @@ class THELightningModule(pl.LightningModule):
         self.patience = patience
 
         self.fc4 = nn.Linear(embedding_dim, 5)
+        self.mask_proj = nn.Linear(embedding_dim, 12)
 
     def forward(self, x):
         #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
@@ -48,13 +49,8 @@ class THELightningModule(pl.LightningModule):
         x = self.evoformer(x)
         #print("x after axial attention size: ", x.size()) # torch.Size([128, 200, 90, 64]) B,R,S,embd
 
-        #x = x.permute((0, 2, 3, 1))
-        #print("x after permute size: ", x.size()) # torch.Size([128, 90, 64, 200]) B,S,embd,R
-
-        #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
-
         # take the first row and pass it to linear layer torch.Size([B x S x F])
-        return self.fc4(x[:,0]), x
+        return self.fc4(x[:,0]), self.mask_proj(x) # returning B x S x 5 and B x R x S x 12
 
 
     def cross_entropy_loss(self, logits, labels):
@@ -71,16 +67,15 @@ class THELightningModule(pl.LightningModule):
         rand = probs > 0.9
 
         # save original values
-        before_masking = x[token].clone()
+        before_masking = x[token].clone() # size = number of elements masked (1 dimensional)
         
         # apply masks
         x[token] = torch.full(x[token].size(),5, dtype=torch.uint8, device=self.device) + torch.div(x[token], 6, rounding_mode='floor')*6
         x[rand] = torch.randint(0, high = 6, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
 
-        logits, attn_out = self.forward(x)
-        logits = logits.transpose(1,2) # logits = B C S
-        after_masking = attn_out[token].clone()
-        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(after_masking, before_masking)
+        logits, attn_out = self.forward(x) # logits = B C S (B x 5 x S), y = B S, attn_out = B R S 12
+        logits = logits.transpose(1,2)
+        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[token], before_masking) # attn_out[token].size() = number of elements masked x 12
         train_acc_batch = self.train_accuracy(logits, y)
         self.log('train_loss', loss)
         return loss
@@ -94,7 +89,8 @@ class THELightningModule(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
         x = x.long()
-        logits = forward(x).transpose(1,2) # logits = B C S
+        logits, _ = self.forward(x)
+        logits = logits.transpose(1,2) # logits = B C S
         loss = self.cross_entropy_loss(logits, y)
         val_acc_batch = self.val_accuracy(logits, y)
         self.log('val_acc_batch', val_acc_batch, prog_bar=True)
@@ -119,7 +115,7 @@ def main():
     parser.add_argument('out', type=str) # output file (for train) / directory (for test) path
     parser.add_argument('--valpath', type=str, default=None) # validation set path
     parser.add_argument('--memory', action='store_true', default=False)
-    parser.add_argument('--t', type=int, default=0) # number of threads
+    parser.add_argument('--t', type=int, default=16) # number of threads
     parser.add_argument('--b', type=int, default=16) # batch size
     parser.add_argument("--lr", type=float, default=1e-4)
     parser.add_argument("--epochs", type=int, default=100)
@@ -142,7 +138,7 @@ def main():
     checkpoint_callback = ModelCheckpoint(monitor='val_acc_batch', dirpath=args.out, filename='sample-{val_acc_batch:.2f}')
     
     # initialize trainer
-    trainer = pl.Trainer.from_argparse_args(args, gpus=[4,5,6,7], accelerator="ddp", gradient_clip_val=1.0, logger=wandb_logger, callbacks=[early_stop_callback, checkpoint_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
+    trainer = pl.Trainer.from_argparse_args(args, gpus=[4,5,6,7], strategy="ddp", gradient_clip_val=1.0, logger=wandb_logger, callbacks=[early_stop_callback, checkpoint_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
     
     # data
     data = THEDataModule(args.datapath, args.b, args.memory, args.valpath, args.t)
