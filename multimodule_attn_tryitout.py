@@ -38,7 +38,7 @@ class THELightningModule(pl.LightningModule):
         self.patience = patience
 
         self.fc4 = nn.Linear(embedding_dim, 5)
-        self.mask_proj = nn.Linear(embedding_dim, 12)
+        self.mask_proj = nn.Linear(embedding_dim, 5)
 
     def forward(self, x):
         #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
@@ -62,23 +62,31 @@ class THELightningModule(pl.LightningModule):
         x = x.long() # x.size() = B R S, y.size() = B S
         
         # generate a boolean mask
-        probs=torch.rand(x.size())
-        token = probs > 0.85
-        rand = probs > 0.9
+        probs = torch.rand(x.size(), device = self.device) > 0.85 # a tensor with true and false values
+
+        # a boolean tensor with true at positions where the values are 5 or 11
+        non_unknown = (x == 5) + (x == 11) # true if x at the position is 5 or 11
+
+        # for each position, if negation of non_unknown is true (not 5 not 11), then use probs, otherwise use negation of non_known (false at that position if x at that position is 5 or 11
+        rand = torch.where(~non_unknown > 0, probs, ~non_unknown)  
 
         # save original values
-        before_masking = x[token].clone() # size = number of elements masked (1 dimensional)
+        before_masking = torch.remainder(x[rand],6).clone() # size = number of elements masked (1 dimensional)
         
         # apply masks
-        x[token] = torch.full(x[token].size(),5, dtype=torch.uint8, device=self.device) + torch.div(x[token], 6, rounding_mode='floor')*6
-        x[rand] = torch.randint(0, high = 6, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
+        x[rand] = torch.randint(0, high = 5, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
 
-        logits, attn_out = self.forward(x) # logits = B C S (B x 5 x S), y = B S, attn_out = B R S 12
+        logits, attn_out = self.forward(x) # logits = B C S (B x 5 x S), y = B S, attn_out = B R S 5
         logits = logits.transpose(1,2)
-        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[token], before_masking) # attn_out[token].size() = number of elements masked x 12
+        train_loss = self.cross_entropy_loss(logits, y)
+        masking_loss = self.cross_entropy_loss(attn_out[rand], before_masking)
+        overall_loss = train_loss + 0.1*masking_loss # attn_out[rand].size() = number of elements masked x 5
         train_acc_batch = self.train_accuracy(logits, y)
-        self.log('train_loss', loss)
-        return loss
+        #self.log('train_loss', loss)
+        self.log('overall_loss', overall_loss)
+        self.log('train_loss', train_loss)
+        self.log('masking_loss', masking_loss)
+        return overall_loss
 
 
     def training_epoch_end(self, outputs):

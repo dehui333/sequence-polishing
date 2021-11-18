@@ -1,4 +1,4 @@
 *.log
 *.txt
 *.wandb
-*lightning_logs
+*.pyc

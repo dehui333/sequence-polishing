@@ -39,7 +39,7 @@ class THELightningModule(pl.LightningModule):
         self.patience = patience
 
         self.fc4 = nn.Linear(embedding_dim, 5)
-        self.mask_proj = nn.Linear(embedding_dim, 12)
+        self.mask_proj = nn.Linear(embedding_dim, 5)
 
     def forward(self, x):
         #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
@@ -72,31 +72,51 @@ class THELightningModule(pl.LightningModule):
         x = x.long() # x.size() = B R S, y.size() = B S
 
         # generate a boolean mask
-        probs=torch.rand(x.size())
-        token = probs > 0.85
-        rand = probs > 0.9
-        print("token \n", token[1][0])
+        #probs=torch.rand(x.size())
+        #token = probs > 0.85
+        #rand = probs > 0.9
+        #rand = torch.rand(x.size()) > 0.85
+
+        #for i in range(0, 81):
+        #    print("x \n", i, x[3][i])
+        #sys.exit()
+
+        probs = torch.rand(x.size(), device = self.device) > 0.85 # a tensor with true and false values
+        print("probs \n", probs[1][0])
+
+        print("x \n", x[1][0])
+
+        non_unknown = (x == 5) + (x == 11) # true if x at position is 5 or 11
+        print("non_unknown \n", ~non_unknown[1][0]) # get the negation of the matrix, so false if x at position is 5 or 11
+
+        rand = torch.where(~non_unknown > 0, probs, ~non_unknown) # if the position is true (not 5 not 11), then use probs, 
+        #if it is, then use negation of non_known, which should be false at that position
+
+        #print("token \n", token[1][0])
         print("rand \n", rand[1][0])
 
+        #sys.exit()
+
         # save original values
-        before_masking = x[token].clone()
+        before_masking = torch.remainder(x[rand],6).clone() # x[rand].clone()
         print("size before masking: ", before_masking.size()) # number of elements masked
-        print("the masked elements (before)", before_masking[3])
+        print("the masked elements (before remainder)", x[rand][3],x[rand][30],x[rand][300])
+        print("the masked elements (before masking, after remainder)", before_masking[3],before_masking[30],before_masking[300])
         print("before masking \n", x[1][0])
 
         # apply masks
-        print(x[token].type)
-        x[token] = torch.full(x[token].size(),5, dtype=torch.uint8, device=self.device) + torch.div(x[token], 6, rounding_mode='floor')*6
-        print("after token masking \n", x[1][0])
-        x[rand] = torch.randint(0, high = 6, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
+        print(x[rand].type)
+        #x[token] = torch.full(x[token].size(),5, dtype=torch.uint8, device=self.device) + torch.div(x[token], 6, rounding_mode='floor')*6
+        #print("after token masking \n", x[1][0])
+        x[rand] = torch.randint(0, high = 5, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
         print("after rand masking \n", x[1][0])
 
-        logits, attn_out = self.forward(x) # attn_out = B R S 12
+        logits, attn_out = self.forward(x) # attn_out = B R S 5
         logits = logits.transpose(1,2) # logits = B C S , y = B S
         #after_masking = attn_out[token].clone()
-        print("size after forward function: ", attn_out[token].size()) # shoule be number of elements masked x 12
-        print("the masked elements (after forward)", attn_out[token][3])
-        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[token], before_masking)
+        print("size after forward function: ", attn_out[rand].size()) # shoule be number of elements masked x 5
+        print("the masked elements (after forward)", attn_out[rand][3])
+        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[rand], before_masking)
         train_acc_batch = self.train_accuracy(logits, y)
         self.log('train_loss', loss)
         sys.exit()
