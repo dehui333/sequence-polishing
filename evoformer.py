@@ -6,14 +6,11 @@ from attentions import MSAGatedAttention
 class Evoformer(nn.Module):
     def __init__(self, msa_embedding_dim, heads, num_blocks):
         super().__init__()
-        
-        self.blocks = nn.ModuleList([EvoformerBlock(msa_embedding_dim, heads) for i in range(num_blocks)])
+
+        self.blocks = nn.Sequential(*[EvoformerBlock(msa_embedding_dim, heads) for i in range(num_blocks)])
 
     def forward(self, msa_repr):
-        for block in self.blocks:
-            msa_repr = block(msa_repr)
-
-        return msa_repr
+        return self.blocks(msa_repr)
 
 
 class EvoformerBlock(nn.Module):

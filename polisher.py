@@ -7,20 +7,21 @@ import pytorch_lightning as pl
 import torch.nn.functional as F
 import torchmetrics
 from THEDataModule import THEDataModule
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+# from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 import torch.nn as nn
 import numpy as np
 import torch.nn.init as init
 import math
 from pytorch_lightning.loggers import WandbLogger
 from evoformer import Evoformer
-import sys
-
+# import sys
+# from fairscale.nn import checkpoint_wrapper
+from pytorch_lightning.plugins import DDPPlugin
 
 
 class Polisher(pl.LightningModule):
 
-    def __init__(self, model_name, lr=1e-4, epochs=100, patience=30, **model_parameters):
+    def __init__(self, model_name, lr=1e-4, epochs=100, **model_parameters):
         super().__init__()
         #constructor
         self.model_name = model_name
@@ -34,12 +35,11 @@ class Polisher(pl.LightningModule):
         # Hyperparameters
         self.lr = lr
         self.epochs = epochs
-        self.patience = patience
 
     class Original_roko(nn.Module):
         def __init__(self, **params):
             super().__init__()
-            # Model 
+            # Model
             self.embedding = nn.Embedding(12, 50)
             self.do = nn.Dropout(0.2)
 
@@ -84,19 +84,24 @@ class Polisher(pl.LightningModule):
     class Attention_roko(nn.Module):
         def __init__(self, **params):
             super().__init__()
-            # Model 
+            # Model
             self.embedding = nn.Embedding(12, params.get('embedding_dim'))
             self.do = nn.Dropout(0.2)
             self.evoformer = Evoformer(msa_embedding_dim = params.get('embedding_dim'), heads = params.get('heads'), num_blocks = params.get('evoformer_blocks'))
             self.fc4 = nn.Linear(params.get('embedding_dim'), 5)
-            self.mask_proj = nn.Linear(params.get('embedding_dim'), 5)
 
-        def forward(self, x):
+        def forward(self, x): # mask B R S
             x = self.do(self.embedding(x)) # B R S E
             x = self.evoformer(x) # B R S E
-            # (B R S E) -> take the first row of R dimension -> (B S E) and pass it to linear layer
-            return self.fc4(x[:,0]), self.mask_proj(x) # B S 5 and B R S 12
+            # (B R S E) -> take the first row of R dimension -> (B S E) and pass it to linear layer --> self.fc4(x[:, 0]) = BxSx5
+            return self.fc4(x[:,0])
 
+        def forward_train(self, x, mask): # mask B R S
+            x = self.do(self.embedding(x)) # B R S E
+            x = self.evoformer(x) # B R S E
+            # (B R S E) -> take the first row of R dimension -> (B S E) and pass it to linear layer --> self.fc4(x[:, 0]) = BxSx5
+            # x[mask] = N_masked E --> self.fc4(x[mask]) = N_masked 5
+            return self.fc4(x[:,0]), self.fc4(x[mask]) # B S 5 and N_masked 5
 
 
     def forward(self, x):
@@ -110,62 +115,64 @@ class Polisher(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
         x = x.long() # x.size() = B R S, y.size() = B S
-        
+
+        # Masking
+        # 1) MASK = we create our mask if > 0.8
+        # 2) unkown -> we set elements which are unknown
+        # 3) final mask -> bitwise-and (mask AND NOT unknown)
+        # 4) we get values before_masking, but without strand info -> use for ground truth (target labels)
+        # 5) We take random values 0-11 (with strand info) and apply it to the masked positions. after fc4 in forward it becomes 0-5 
+
         # generate a boolean mask
-        probs = torch.rand(x.size(), device = self.device) > 0.85 # a tensor with true and false values
+        mask = torch.rand(x.size(), device = self.device) > 0.80 # a tensor with true and false values, BxRxS
 
         # a boolean tensor with true at positions where the values are 5 or 11
-        non_unknown = (x == 5) + (x == 11) # true if x at the position is 5 or 11
+        unknown = (x == 5) | (x == 11) # true if x at the position is 5 or 11  size = BxRxS
 
-        # for each position, if negation of non_unknown is true (not 5 not 11), then use probs, otherwise use negation of non_known (false at that position if x at that position is 5 or 11
-        rand = torch.where(~non_unknown > 0, probs, ~non_unknown)  
+        # for each position, make masked positions false at places where x is 5 or 11
+        mask &= ~unknown
 
         # save original values
-        before_masking = torch.remainder(x[rand],6).clone() # size = number of elements masked (1 dimensional)
-        
+        before_masking = torch.remainder(x[mask],6) # size = number of elements masked (1 dimensional)
+
         # apply masks, x is still B R S
-        x[rand] = torch.randint(0, high = 5, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
+        x[mask] = torch.randint(0, high = 5, size=x[mask].size(), dtype=torch.uint8, device=self.device) + torch.div(x[mask], 6, rounding_mode='floor')*6
 
         if self.model_name == 'Attention_roko':
-            logits, attn_out = self.forward(x) # logits = B C S (B x 5 x S), y = B S, attn_out = B R S 5
-            masking_loss = self.cross_entropy_loss(attn_out[rand], before_masking)
+            logits, attn_out = self.backbone_cls.forward_train(x, mask) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
+            masking_loss = self.cross_entropy_loss(attn_out, before_masking)
         else:
             logits = self.forward(x)
             masking_loss = 0
-        
+
         logits = logits.transpose(1,2)
         train_loss = self.cross_entropy_loss(logits, y)
-        
-        overall_loss = train_loss + 0.1*masking_loss # attn_out[rand].size() = number of elements masked x 5
+
+        overall_loss = train_loss + 0.1 * masking_loss
         train_acc_batch = self.train_accuracy(logits, y)
-        #self.log('train_loss', loss)
-        self.log('overall_loss', overall_loss)
+
         self.log('train_loss', train_loss)
         self.log('masking_loss', masking_loss)
-        sys.exit()
+        self.log('overall_loss', overall_loss)
         return overall_loss
 
 
     def training_epoch_end(self, outputs):
-        accuracy = self.train_accuracy.compute()
-        self.log('Train_acc_epoch', accuracy, prog_bar=True)
+        self.log('Train_acc_epoch', self.train_accuracy, prog_bar=True)
 
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
         x = x.long()
-        logits, _ = self.forward(x)
+        logits = self.forward(x)
         logits = logits.transpose(1,2) # logits = B C S
         loss = self.cross_entropy_loss(logits, y)
-        val_acc_batch = self.val_accuracy(logits, y)
-        self.log('val_acc_batch', val_acc_batch, prog_bar=True)
-        self.log('val_loss_batch', loss, prog_bar=True)
-        return loss
+        self.val_accuracy(logits, y)
+        self.log('val_loss', loss)
 
 
     def validation_epoch_end(self, outputs):
-        accuracy = self.val_accuracy.compute()
-        self.log('val_acc_epoch', accuracy, prog_bar=True)
+        self.log('val_acc_epoch', self.val_accuracy, prog_bar=True)
 
 
     def configure_optimizers(self):
@@ -181,13 +188,13 @@ def main():
     parser.add_argument('backbone', type=str) # choose attn or rnn
     parser.add_argument('--valpath', type=str, default=None) # validation set path
     parser.add_argument('--memory', action='store_true', default=False)
-    parser.add_argument('--t', type=int, default=16) # number of threads
-    parser.add_argument('--b', type=int, default=16) # batch size
+    parser.add_argument('--t', type=int, default=4) # number of threads
+    parser.add_argument('--b', type=int, default=8) # batch size
 
     # hyperparameters
-    parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--lr", type=float, default=5e-4)
     parser.add_argument("--epochs", type=int, default=100)
-    parser.add_argument("--patience", type=int, default=30)
+    # parser.add_argument("--patience", type=int, default=30)
 
     # roko_attn parameters
     parser.add_argument("--embedding_dim", type=int, default=128)
@@ -200,7 +207,6 @@ def main():
     parser.add_argument("--num_layers", type=int, default=3)
 
 
-    
     parser = pl.Trainer.add_argparse_args(parser)
     args = parser.parse_args()
 
@@ -208,21 +214,35 @@ def main():
     wandb_logger = WandbLogger(project='docker_roko', log_model='all')
 
     # early stopping
-    early_stop_callback = EarlyStopping(monitor="val_acc_batch", patience=args.patience)
+    # early_stop_callback = EarlyStopping(monitor="val_acc_epoch", patience=args.patience, mode = 'max')
 
     # model checkpoint
-    checkpoint_callback = ModelCheckpoint(monitor='val_acc_batch', dirpath=args.out, filename='sample-{val_acc_batch:.2f}')
+    checkpoint_callback = ModelCheckpoint(save_top_k=-1, dirpath=args.out, filename='{epoch}-{val_loss:.5f}-{val_acc_epoch:.5f}')
     
     # initialize trainer
-    trainer = pl.Trainer.from_argparse_args(args, gpus=[0,1,3], strategy="ddp", gradient_clip_val=1.0, logger=wandb_logger, callbacks=[early_stop_callback, checkpoint_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
-    
+    trainer = pl.Trainer.from_argparse_args(args,
+                                            gpus=[3,4,5,7],
+                                            precision = 16,
+                                            gradient_clip_val=1.0,
+                                            logger=wandb_logger,
+                                            strategy=DDPPlugin(find_unused_parameters=False),
+                                            callbacks=[checkpoint_callback]) #, early_stop_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
+
     # data
     data = THEDataModule(args.datapath, args.b, args.memory, args.valpath, args.t)
 
     # Instantiate model
-    model = Polisher(model_name = args.backbone, lr=args.lr, epochs=args.epochs, patience=args.patience, embedding_dim = args.embedding_dim, heads = args.heads, evoformer_blocks = args.evoformer_blocks, hidden_size = args.hidden_size, in_size = args.in_size, num_layers = args.num_layers)
+    model = Polisher(model_name = args.backbone, 
+                     lr=args.lr, 
+                     epochs=args.epochs, 
+                     embedding_dim = args.embedding_dim, 
+                     heads = args.heads, 
+                     evoformer_blocks = args.evoformer_blocks, 
+                     hidden_size = args.hidden_size, 
+                     in_size = args.in_size, 
+                     num_layers = args.num_layers)
 
-    wandb_logger.watch(model)
+    # wandb_logger.watch(model) # Log gradients, parameters and model topology
 
     trainer.fit(model, datamodule=data)
 

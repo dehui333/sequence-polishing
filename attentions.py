@@ -2,6 +2,8 @@ import torch
 from torch import nn
 from torch import functional as F
 import math
+from torch.utils.checkpoint import checkpoint
+
 
 def dot_product_attention(q, k, v, attn_bias=None):
     _, _, c = q.shape
@@ -69,7 +71,7 @@ class GatedAxialAttentionUnit(nn.Module):
 
         return output.reshape(permuted_shape).permute(*self.inv_dims_permutation).contiguous()
 
-class MSAGatedAttention(nn.Module): 
+class MSAGatedAttention(nn.Module):
     def __init__(self, axis, embedding_dim, heads):
         super().__init__()
 
@@ -82,4 +84,5 @@ class MSAGatedAttention(nn.Module):
 
     def forward(self, msa_repr):
         msa_repr = self.layer_norm(msa_repr)
+        msa_repr = self.ax_attn(msa_repr) #checkpoint(self.ax_attn, msa_repr)
         return msa_repr

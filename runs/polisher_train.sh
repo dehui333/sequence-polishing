@@ -1,0 +1,1 @@
+python -u /scratch/sequence-polishing/polisher.py /scratch/new_roko_features/train /scratch/model/attn Attention_roko --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 8 --lr 3e-4 > train_polisher_attn_output.txt

@@ -18,7 +18,7 @@ import sys
 
 class THELightningModule(pl.LightningModule):
 
-    def __init__(self, lr, epochs, patience, in_size, hidden_size, num_layers):
+    def __init__(self, lr=5e-4, epochs=100, patience=30, in_size=500, hidden_size=128, num_layers=3):
         super().__init__()
         #constructor
 
@@ -156,7 +156,7 @@ def main():
     parser.add_argument('--memory', action='store_true', default=False)
     parser.add_argument('--t', type=int, default=0) # number of threads
     parser.add_argument('--b', type=int, default=128) # batch size
-    parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--lr", type=float, default=5e-4)
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--patience", type=int, default=30)
     parser.add_argument("--in_size", type=int, default=500)

@@ -1,1 +1,1 @@
-python -u /scratch/sequence-polishing/inference.py /scratch/roko_old_features/sa/sa_test.hdf5 /scratch/model/attn/sample-val_acc_batch=1.00-v5.ckpt /scratch/outputs/test_attn_output_new.fasta --t 32 > test_attn_output.txt
+python -u /scratch/sequence-polishing/inference.py /scratch/new_roko_features/test/sa_p1.hdf5 /scratch/model/roko_rnn/sample-val_acc_batch=1.00-v3.ckpt /scratch/outputs/inference_roko_rnn_with_masking.fasta --t 32 > test_rnn_output.txt

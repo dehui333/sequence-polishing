@@ -146,7 +146,7 @@ def main():
     checkpoint_callback = ModelCheckpoint(monitor='val_acc_batch', dirpath=args.out, filename='sample-{val_acc_batch:.2f}')
     
     # initialize trainer
-    trainer = pl.Trainer.from_argparse_args(args, gpus=[4,5,6,7], strategy="ddp", gradient_clip_val=1.0, logger=wandb_logger, callbacks=[early_stop_callback, checkpoint_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
+    trainer = pl.Trainer.from_argparse_args(args, gpus=[2,3,4,5], strategy="ddp", gradient_clip_val=1.0, logger=wandb_logger, callbacks=[early_stop_callback, checkpoint_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
     
     # data
     data = THEDataModule(args.datapath, args.b, args.memory, args.valpath, args.t)

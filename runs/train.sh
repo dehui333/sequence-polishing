@@ -1,1 +1,1 @@
-NCCL_DEBUG=INFO python -u /scratch/sequence-polishing/multimodule_attn_tryitout.py /scratch/new_roko_features/train /scratch/model/attn Attention_roko --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 32 --lr 5e-4 > train_attn_output.txt
+NCCL_DEBUG=INFO python -u /scratch/sequence-polishing/multimodule_attn_tryitout.py /scratch/new_roko_features/train /scratch/model/attn --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 32 --lr 5e-4 > train_attn_output.txt

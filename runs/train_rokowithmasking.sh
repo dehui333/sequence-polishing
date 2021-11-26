@@ -1,1 +1,1 @@
-NCCL_DEBUG=INFO python -u /scratch/sequence-polishing/multimodule.py /scratch/new_roko_features/train /scratch/model/roko_rnn --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 32 --lr 5e-4 > train_rnn_output.txt
+NCCL_DEBUG=INFO python -u /scratch/sequence-polishing/polisher.py /scratch/new_roko_features/train /scratch/model/roko_rnn Original_roko --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 32 --lr 5e-4 --patience 8 > train_rnn_output.txt

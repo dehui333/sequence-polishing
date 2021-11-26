@@ -41,10 +41,10 @@ class THEDataModule(pl.LightningDataModule):
         self.val_ds = self.data_class(self.val_path, transform=TrainToTensor())
 
     def train_dataloader(self):
-        return DataLoader(self.train_ds, self.batch_size, True, num_workers= self.workers)
+        return DataLoader(self.train_ds, self.batch_size, True, num_workers=self.workers, pin_memory=True)
 
     def val_dataloader(self):
-        return DataLoader(self.val_ds, self.batch_size, num_workers= self.workers)
+        return DataLoader(self.val_ds, self.batch_size, num_workers=self.workers, pin_memory=True)
 
     def test_dataloader(self):
         pass

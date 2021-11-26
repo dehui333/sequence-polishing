@@ -73,7 +73,7 @@ class StorageDataset(Dataset):
 
         if self.transform:
             tup = self.transform(tup)
-            
+
         return tup
 
     def __len__(self):
