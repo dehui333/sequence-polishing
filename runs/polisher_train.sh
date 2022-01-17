@@ -1,1 +1,1 @@
-python -u /scratch/sequence-polishing/polisher.py /scratch/new_roko_features/train /scratch/model/attn Attention_roko --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 8 --lr 3e-4 > train_polisher_attn_output.txt
+TORCH_DISTRIBUTED_DEBUG=INFO python -u /scratch/sequence-polishing/polisher.py /scratch/new_roko_features/train /scratch/model/attn/chr20 Attention_roko --valpath /scratch/new_roko_features/val/lm_p1.hdf5 --b 8 --p_keep 1 --lr 3e-4 > train_polisher_attn_chr20_output.txt

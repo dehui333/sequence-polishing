@@ -8,9 +8,9 @@ from torch.utils.data import Dataset, DataLoader
 import itertools
 #from rnn_model import *
 import numpy as np
-#from polisher import Polisher
+from polisher import Polisher
 #from multimodule_attn_tryitout import THELightningModule
-from multimodule import THELightningModule
+#from multimodule import THELightningModule
 
 GPU_NUM = 1
 
@@ -92,10 +92,11 @@ class InferenceDataset(Dataset):
 
 def infer(data, model_path, out, workers=0, batch_size=128):
     use_cuda = torch.cuda.is_available()
-    device = torch.device('cuda:0' if use_cuda else 'cpu')
+    device = torch.device('cuda:3' if use_cuda else 'cpu')
     print(device.type)
 
-    model = THELightningModule.load_from_checkpoint(checkpoint_path=model_path).to(device)
+    
+    model = Polisher.load_from_checkpoint(checkpoint_path=model_path, model_name = 'Attention_roko', embedding_dim=128, heads=8, evoformer_blocks=8, p_keep=1).to(device)
     model.freeze()
     #model = RNN(IN_SIZE, HIDDEN_SIZE, NUM_LAYERS).to(device)
     #model.load_state_dict(torch.load(model_path))
@@ -118,6 +119,7 @@ def infer(data, model_path, out, workers=0, batch_size=128):
         for i, batch in enumerate(dataloader):
             c, pos, x = batch
             x = x.type(torch.cuda.LongTensor if device.type == 'cuda' else torch.LongTensor)
+            x = x.to(device)
 
             logits = model(x)
             Y = torch.argmax(logits, dim=2).long()
@@ -134,28 +136,34 @@ def infer(data, model_path, out, workers=0, batch_size=128):
                 print(f'{i + 1} batches processed')
 
     contigs = dataset.contigs
-    for contig in result:
-        values = result[contig]
+    with open("/scratch/outputs/check_features/aux_file.txt", "w") as aux_file:
+        for contig in result:
+            values = result[contig]
 
-        pos_sorted = sorted(values)
-        pos_sorted = list(itertools.dropwhile(lambda x: x[1] != 0, pos_sorted))
+            pos_sorted = sorted(values)
+            pos_sorted = list(itertools.dropwhile(lambda x: x[1] != 0, pos_sorted))
 
-        first = pos_sorted[0][0]
-        contig_data = contigs[contig]
-        seq = contig_data[0][:first]
+            first = pos_sorted[0][0]
+            contig_data = contigs[contig]
+            seq = contig_data[0][:first]
 
-        for i, p in enumerate(pos_sorted):
-            base, _ = values[p].most_common(1)[0]
-            if base == GAP:
-                continue
-            seq += base
+            aux_file.write(f'{contig}\n')
 
-        last_pos = pos_sorted[-1][0]
-        seq += contig_data[0][last_pos+1:]
+            for i, p in enumerate(pos_sorted):
+                base, _ = values[p].most_common(1)[0]
+                # save the position and base to a file: 
+                aux_file.write(f'{p}\t{base}\n')
 
-        seq = Seq(seq)
-        record = SeqRecord.SeqRecord(seq, id=contig)
-        records.append(record)
+                if base == GAP:
+                    continue
+                seq += base
+
+            last_pos = pos_sorted[-1][0]
+            seq += contig_data[0][last_pos+1:]
+
+            seq = Seq(seq)
+            record = SeqRecord.SeqRecord(seq, id=contig)
+            records.append(record)
 
     with open(out, 'w') as f:
         SeqIO.write(records, f, 'fasta')
@@ -171,6 +179,7 @@ def main():
     args = parser.parse_args()
 
     infer(args.data, args.model, args.out, args.t, args.b)
+    print("done")
 
 
 if __name__ == '__main__':

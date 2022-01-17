@@ -1,197 +1,168 @@
-#train.py
-import torch
-from argparse import ArgumentParser
-from progressbar import ProgressBar
-from pytorch_lightning.callbacks import ModelCheckpoint
-import pytorch_lightning as pl
-import torch.nn.functional as F
-import torchmetrics
-from THEDataModule import THEDataModule
-from pytorch_lightning.callbacks.early_stopping import EarlyStopping
-import torch.nn as nn
-import numpy as np
-import torch.nn.init as init
-import math
-#from pytorch_lightning.loggers import WandbLogger
-from evoformer import Evoformer
-import sys
-#import random
+import pysam
+from Bio import SeqIO
+from labels import *
+import argparse
+from multiprocessing import Pool
+import gen
+from data import DataWriter
 
-class THELightningModule(pl.LightningModule):
+ENCODED_UNKNOWN = encoding[UNKNOWN]
 
-    def __init__(self, lr=1e-4, epochs=100, patience=30, embedding_dim=128, heads=8, evoformer_blocks=8):
-        super().__init__()
-        #constructor
-
-        # Model 
-        self.embedding = nn.Embedding(12, embedding_dim)
-        self.do = nn.Dropout(0.2)
-
-        self.evoformer = Evoformer(embedding_dim, heads, evoformer_blocks)
-
-        # Metrics
-        self.train_accuracy = torchmetrics.Accuracy()
-        self.val_accuracy = torchmetrics.Accuracy()
-
-        # Hyperparameters
-        self.lr = lr
-        self.epochs = epochs
-        self.patience = patience
-
-        self.fc4 = nn.Linear(embedding_dim, 5)
-        self.mask_proj = nn.Linear(embedding_dim, 5)
-
-    def forward(self, x):
-        #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
-        #print(torch.unique(x))
-        torch.set_printoptions(profile="full")
-
-        #print("x input size: ", x.size()) # torch.Size([128, 200, 90]) B,R,S
-        #sys.exit()
-
-        x = self.do(self.embedding(x))
-        #print("x after embedding size: ", x.size()) # torch.Size([128, 200, 90, 64]) B,R,S,embd
-        
-        x = self.evoformer(x)
-        #print("x after axial attention size: ", x.size()) # torch.Size([128, 200, 90, 64]) B,R,S,embd
-
-        #x = x.permute((0, 2, 3, 1))
-        #print("x after permute size: ", x.size()) # torch.Size([128, 90, 64, 200]) B,S,embd,R
-
-        #print("x[:,:,:,0] size: ", x[:,:,:,0].size()) # torch.Size([128, 90, 64])
-
-        # take the first row and pass it to linear layer torch.Size([B x S x F])
-        return self.fc4(x[:,0]), self.mask_proj(x)
-
-    def cross_entropy_loss(self, logits, labels):
-        return F.cross_entropy(logits, labels)
+GROUP_SIZE = 10000
+NUM_WORKERS = 6
+MAX_INS = 5
 
 
-    def training_step(self, batch, batch_idx):
-        x, y = batch
-        x = x.long() # x.size() = B R S, y.size() = B S
+def generate_regions(ref, ref_name, window=100_000, overlap=300):
+    length = len(ref)
+    i = 0
 
-        # generate a boolean mask
-        #probs=torch.rand(x.size())
-        #token = probs > 0.85
-        #rand = probs > 0.9
-        #rand = torch.rand(x.size()) > 0.85
+    while i < length:
+        end = i + window
+        yield Region(ref_name, i, min(end, length))
 
-        #for i in range(0, 81):
-        #    print("x \n", i, x[3][i])
-        #sys.exit()
-
-        probs = torch.rand(x.size(), device = self.device) > 0.85 # a tensor with true and false values
-        print("probs \n", probs[1][0])
-
-        print("x \n", x[1][0])
-
-        non_unknown = (x == 5) + (x == 11) # true if x at position is 5 or 11
-        print("non_unknown \n", ~non_unknown[1][0]) # get the negation of the matrix, so false if x at position is 5 or 11
-
-        rand = torch.where(~non_unknown > 0, probs, ~non_unknown) # if the position is true (not 5 not 11), then use probs, 
-        #if it is, then use negation of non_known, which should be false at that position
-
-        #print("token \n", token[1][0])
-        print("rand \n", rand[1][0])
-
-        #sys.exit()
-
-        # save original values
-        before_masking = torch.remainder(x[rand],6).clone() # x[rand].clone()
-        print("size before masking: ", before_masking.size()) # number of elements masked
-        print("the masked elements (before remainder)", x[rand][3],x[rand][30],x[rand][300])
-        print("the masked elements (before masking, after remainder)", before_masking[3],before_masking[30],before_masking[300])
-        print("before masking \n", x[1][0])
-
-        # apply masks
-        print(x[rand].type)
-        #x[token] = torch.full(x[token].size(),5, dtype=torch.uint8, device=self.device) + torch.div(x[token], 6, rounding_mode='floor')*6
-        #print("after token masking \n", x[1][0])
-        x[rand] = torch.randint(0, high = 5, size=x[rand].size(), dtype=torch.uint8, device=self.device) + torch.div(x[rand], 6, rounding_mode='floor')*6
-        print("after rand masking \n", x[1][0])
-
-        logits, attn_out = self.forward(x) # attn_out = B R S 5
-        logits = logits.transpose(1,2) # logits = B C S , y = B S
-        #after_masking = attn_out[token].clone()
-        print("size after forward function: ", attn_out[rand].size()) # shoule be number of elements masked x 5
-        print("the masked elements (after forward)", attn_out[rand][3])
-        loss = self.cross_entropy_loss(logits, y) + 0.1*self.cross_entropy_loss(attn_out[rand], before_masking)
-        train_acc_batch = self.train_accuracy(logits, y)
-        self.log('train_loss', loss)
-        sys.exit()
-
-        return loss
+        if end >= length:
+            break
+        else:
+            i = end - overlap
 
 
-    def training_epoch_end(self, outputs):
-        accuracy = self.train_accuracy.compute()
-        self.log('Train_acc_epoch', accuracy, prog_bar=True)
+def is_in_region(pos, aligns):
+    for a in aligns:
+        if a.start <= pos < a.end:
+            return True
+    return False
 
 
-    def validation_step(self, batch, batch_idx):
-        x, y = batch
-        x = x.long()
-        logits, _ = self.forward(x)
-        logits = logits.transpose(1,2) # logits = B C S
-        loss = self.cross_entropy_loss(logits, y)
-        val_acc_batch = self.val_accuracy(logits, y)
-        self.log('val_acc_batch', val_acc_batch, prog_bar=True)
-        self.log('val_loss_batch', loss, prog_bar=True)
-        return loss
+def generate_train(args):
+    bam_X, bam_Y, ref, region = args
+
+    alignments = get_aligns(bam_Y, ref_name=region.name, start=region.start, end=region.end)
+    filtered = filter_aligns(alignments)
+
+    print(f'Finished generating labels for {region.name}:{region.start}-{region.end}.')
+
+    if not filtered:
+        print('No alignments.')
+        return None
+
+    positions, examples, labels = [], [], []
+
+    for a in filtered:
+        pos_labels = dict()
+        n_pos = set()
+
+        t_pos, t_labels = get_pos_and_labels(a, ref, region)
+        for p, l in zip(t_pos, t_labels):
+            if l == ENCODED_UNKNOWN:
+                n_pos.add(p)
+            else:
+                pos_labels[p] = l
+
+        pos_sorted = sorted(list(pos_labels.keys()))
+        try:
+            region_string = f'{region.name}:{pos_sorted[0][0]+1}-{pos_sorted[-1][0]}'
+        except:
+            t_pos.sort()
+            print('Error here!', region, a.start, a.end, a.align)#region.name, t_pos[0], t_pos[-1])
+            continue
+        #region_string = f'{region.name}:{pos_sorted[0][0]+1}-{pos_sorted[-1][0]}'
+
+        result = gen.generate_features(bam_X, str(ref), region_string)
+
+        for P, X in zip(*result):
+            Y = []
+            to_yield = True
+
+            for p in P:
+                assert is_in_region(p[0], filtered)
+
+                if p in n_pos:
+                    to_yield = False
+                    break
+
+                try:
+                    y_label = pos_labels[p]
+                except KeyError:
+                    if p[1] != 0:
+                        y_label = encoding[GAP]
+                    else:
+                        raise KeyError(f'No label mapping for position {p}.')
+
+                Y.append(y_label)
+
+            if to_yield:
+                positions.append(P)
+                examples.append(X)
+                labels.append(Y)
+
+    print(f'Finished generating examples for {region.name}:{region.start}-{region.end}.')
+    return region.name, positions, examples, labels
 
 
-    def validation_epoch_end(self, outputs):
-        accuracy = self.val_accuracy.compute()
-        self.log('val_acc_epoch', accuracy, prog_bar=True)
+def generate_infer(args):
+    bam_X, ref, region = args
 
+    region_string = f'{region.name}:{region.start+1}-{region.end}'
+    result = gen.generate_features(bam_X, ref, region_string)
 
-    def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        return optimizer
+    positions, examples = [], []
+
+    for P, X in zip(*result):
+        positions.append(P)
+        examples.append(X)
+
+    print(f'Finished generating examples for {region.name}:{region.start}-{region.end}.')
+    return region.name, positions, examples, None
 
 
 def main():
-    # argument parser
-    parser = ArgumentParser()
-    parser.add_argument('datapath', type=str) # training set path or test set path
-    parser.add_argument('out', type=str) # output file (for train) / directory (for test) path
-    parser.add_argument('--valpath', type=str, default=None) # validation set path
-    parser.add_argument('--memory', action='store_true', default=False)
-    parser.add_argument('--t', type=int, default=0) # number of threads
-    parser.add_argument('--b', type=int, default=16) # batch size
-    parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--epochs", type=int, default=100)
-    parser.add_argument("--patience", type=int, default=30)
-    parser.add_argument("--embedding_dim", type=int, default=128)
-    parser.add_argument("--heads", type=int, default=8)
-    parser.add_argument("--evoformer_blocks", type=int, default=8)
-
-    
-    parser = pl.Trainer.add_argparse_args(parser)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('ref', type=str)
+    parser.add_argument('X', type=str)
+    parser.add_argument('--Y', type=str, default=None)
+    parser.add_argument('o', type=str)
+    parser.add_argument('--t', type=int, default=1)
     args = parser.parse_args()
 
-    # weights and biases
-    #wandb_logger = WandbLogger(project='docker_roko', log_model='all')
+    inference = False if args.Y else True
+    size = 0
 
-    # early stopping
-    early_stop_callback = EarlyStopping(monitor="val_acc_batch", patience=args.patience)
+    with open(args.ref, 'r') as handle:
+        refs = [(str(r.id), str(r.seq)) for r in SeqIO.parse(handle, 'fasta')]
 
-    # model checkpoint
-    checkpoint_callback = ModelCheckpoint(monitor='val_acc_batch', dirpath=args.out, filename='sample-{val_acc_batch:.2f}')
-    
-    # initialize trainer
-    trainer = pl.Trainer.from_argparse_args(args, gpus=[7], strategy="ddp", gradient_clip_val=1.0, callbacks=[early_stop_callback, checkpoint_callback])    
-    # data
-    data = THEDataModule(args.datapath, args.b, args.memory, args.valpath, args.t)
+    with DataWriter(args.o, inference) as data:
+        data.write_contigs(refs)
 
-    # Instantiate model
-    model = THELightningModule(lr=args.lr, epochs=args.epochs, patience=args.patience, embedding_dim = args.embedding_dim, heads = args.heads, evoformer_blocks = args.evoformer_blocks)
+        func = generate_infer if inference else generate_train
 
-    #wandb_logger.watch(model)
+        arguments = []
+        for n, r in refs:
+            for region in generate_regions(r, n):
+                a = (args.X, r, region) if inference else (args.X, args.Y, r, region)
+                arguments.append(a)
 
-    trainer.fit(model, datamodule=data)
+        print(f'Data generation started, number of jobs: {len(arguments)}.')
+
+        with Pool(processes=args.t) as pool:
+            finished = 0
+            for result in pool.imap(func, arguments):
+                if not result:
+                    continue
+                c, p, x, y = result
+                data.store(c, p, x, y)
+                finished += 1
+
+                if finished % 10 == 0:
+                    print('Writing to disk started')
+                    data.write()
+                    print('Writing to disk finished')
+
+            print('Writing to disk started')
+            data.write()
+            print('Writing to disk finished')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
+

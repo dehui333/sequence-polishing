@@ -5,12 +5,13 @@ import argparse
 from multiprocessing import Pool
 import gen
 from data import DataWriter
+import sys
 
 ENCODED_UNKNOWN = encoding[UNKNOWN]
 
 GROUP_SIZE = 10000
 NUM_WORKERS = 6
-MAX_INS = 3
+MAX_INS = 5
 
 
 def generate_regions(ref, ref_name, window=100_000, overlap=300):
@@ -38,7 +39,7 @@ def generate_train(args):
     bam_X, bam_Y, ref, region = args
 
     alignments = get_aligns(bam_Y, ref_name=region.name, start=region.start, end=region.end)
-    filtered = filter_aligns(alignments)
+    filtered = filter_aligns(alignments, start = region.start, end = region.end)
 
     print(f'Finished generating labels for {region.name}:{region.start}-{region.end}.')
 
@@ -60,7 +61,14 @@ def generate_train(args):
                 pos_labels[p] = l
 
         pos_sorted = sorted(list(pos_labels.keys()))
-        region_string = f'{region.name}:{pos_sorted[0][0]+1}-{pos_sorted[-1][0]}'
+        try:
+            region_string = f'{region.name}:{pos_sorted[0][0]+1}-{pos_sorted[-1][0]}'
+        except:
+            t_pos.sort()
+            print('Error here!', region, a.start, a.end, a.align)#region.name, t_pos[0], t_pos[-1])
+            sys.exit()
+            continue
+        #region_string = f'{region.name}:{pos_sorted[0][0]+1}-{pos_sorted[-1][0]}'
 
         result = gen.generate_features(bam_X, str(ref), region_string)
 

@@ -1,0 +1,1 @@
+python -u /scratch/sequence-polishing/inference.py /scratch/new_roko_features/test/chr20_test_maxins5.hdf5 /scratch/model/attn/epoch=2-val_loss=0.00109-val_acc_epoch=0.99989.ckpt /scratch/outputs/inference_polisher_attn_15thepoch_chr20.fasta --t 32 > test_polisher_attn_chr20_output.txt

@@ -103,6 +103,10 @@ class Polisher(pl.LightningModule):
             # x[mask] = N_masked E --> self.fc4(x[mask]) = N_masked 5
             return self.fc4(x[:,0]), self.fc4(x[mask]) # B S 5 and N_masked 5
 
+#        def forward_train_skipped(self,x,mask):
+ #           x = self.do(self.embedding(x))
+  #          return self.fc4(x[:,0], self.fc4(x[mask]))
+
 
     def forward(self, x):
         return self.backbone_cls(x)
@@ -141,6 +145,25 @@ class Polisher(pl.LightningModule):
         if self.model_name == 'Attention_roko':
             logits, attn_out = self.backbone_cls.forward_train(x, mask) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
             masking_loss = self.cross_entropy_loss(attn_out, before_masking)
+
+            #var = torch.bernoulli(torch.tensor(self.p_skip).float()) # probability of drawing 1 from bernoulli distribution = self.p_skip
+            #if  torch.equal(var, torch.tensor(1).float().to(var.device)): # if the drawn value is 1, dont pass x through evoformer
+            #    logits, attn_out = self.backbone_cls.forward_train_skipped(x, mask)
+            #else:
+            #    logits, attn_out = self.backbone_cls.forward_train(x, mask) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
+            #masking_loss = self.cross_entropy_loss(attn_out, before_masking)
+            # what is the difference between using torch.bernoulli and using torch.rand?
+            # also, there is the drop_path implementation in timm, which drops examples/samples from each batch, which one would be better?
+#keep_prob = 1 - drop_prob
+#shape = (x.shape[0],) + (1,) * (x.ndim - 1) # 3,1,1,1
+#        (3,)+(1,)*(4-1) retain the first dimension, make the rest of the dimensions all 1
+#random_tensor = keep_prob + torch.rand(shape, dtype=x.dtype, device=x.device)
+# some elements will be greater than 1 if they are greater than 1-keep_prob in the torch.rand generated
+#random_tensor.floor_()  # binarize
+#output = x.div(keep_prob) * random_tensor
+# divide by keep_prob is to scale the remaining elements by 1/keep_prob, so that the expected sum is unchanged
+# such that at test time, when this drop path is not applied, the pre-activation have a comparable scale
+
         else:
             logits = self.forward(x)
             masking_loss = 0
@@ -190,7 +213,7 @@ def main():
     parser.add_argument('--memory', action='store_true', default=False)
     parser.add_argument('--t', type=int, default=4) # number of threads
     parser.add_argument('--b', type=int, default=8) # batch size
-    parser.add_argument('--p_keep', type=float, default=1) # lowest keep rate of block for stochastic depth, default=1 keeps everything
+    parser.add_argument('--p_keep', type=float, default=0) # lowest keep rate of block for stochastic depth
 
 
     # hyperparameters
@@ -223,11 +246,11 @@ def main():
     
     # initialize trainer
     trainer = pl.Trainer.from_argparse_args(args,
-                                            gpus=[0,4,5,7],
+                                            gpus=[3,4,5,7],
                                             precision = 16,
                                             gradient_clip_val=1.0,
                                             logger=wandb_logger,
-                                            strategy=DDPPlugin(find_unused_parameters=True),
+                                            strategy=DDPPlugin(find_unused_parameters=False),
                                             callbacks=[checkpoint_callback]) #, early_stop_callback]) #track_grad_norm=2, limit_train_batches=100, limit_val_batches=100)
 
     # data
@@ -239,7 +262,7 @@ def main():
                      epochs=args.epochs, 
                      embedding_dim = args.embedding_dim, 
                      heads = args.heads, 
-                     evoformer_blocks = args.evoformer_blocks,
+                     evoformer_blocks = args.evoformer_blocks, 
                      p_keep = args.p_keep,
                      hidden_size = args.hidden_size, 
                      in_size = args.in_size, 

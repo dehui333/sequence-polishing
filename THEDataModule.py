@@ -31,9 +31,9 @@ class THEDataModule(pl.LightningDataModule):
         assert(os.path.exists(self.val_path))
 
 
-    def setup(self, stage):
+    def setup(self, stage = None):
         if self.mem:
-            self.data_class = InMemoryTrainDataset           
+            self.data_class = InMemoryTrainDataset     
         else:
             self.data_class = TrainDataset
 

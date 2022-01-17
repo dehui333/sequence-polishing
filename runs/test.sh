@@ -1,1 +1,1 @@
-python -u /scratch/sequence-polishing/inference.py /scratch/new_roko_features/test/sa_p1.hdf5 /scratch/model/roko_rnn/sample-val_acc_batch=1.00-v3.ckpt /scratch/outputs/inference_roko_rnn_with_masking.fasta --t 32 > test_rnn_output.txt
+python -u /scratch/sequence-polishing/inference.py /scratch/new_roko_features/test/chr20_test_maxins5.hdf5 /scratch/model/attn/from_roko_container/epoch=7-val_loss=0.00107-val_acc_epoch=0.99990.ckpt /scratch/outputs/chr20/polisher_attn_trbac_infchr20_7thepoch_maxins5.fasta --t 32 > test_polisher_attn_output2.txt
