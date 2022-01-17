@@ -9,8 +9,6 @@ import itertools
 #from rnn_model import *
 import numpy as np
 from polisher import Polisher
-#from multimodule_attn_tryitout import THELightningModule
-#from multimodule import THELightningModule
 
 GPU_NUM = 1
 
