@@ -9,11 +9,6 @@ import numpy as np
 
 ENCODED_UNKNOWN = encoding[UNKNOWN]
 
-GROUP_SIZE = 10000
-NUM_WORKERS = 6
-MAX_INS = 3
-
-
 def generate_regions(ref, ref_name, window=100_000, overlap=300):
     length = len(ref)
     i = 0
