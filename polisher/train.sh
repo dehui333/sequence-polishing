@@ -1,1 +1,1 @@
-python -u /scratch/merge/roko/roko/polisher.py /scratch/merged/features_30_90_with_pos_stat/train /scratch/merge/model Attention_roko --valpath /scratch/merged/features_30_90_with_pos_stat/val --b 8 --p_keep 1 --lr 3e-4 > train_merged_30_90_attn_output_v1.txt
+python -u /scratch/sequence-polishing/polisher/polisher.py /scratch/features_30_90_with_pos_stat/train /scratch/model Attention_roko --valpath /scratch/features_30_90_with_pos_stat/val --b 8 --p_keep 1 --lr 3e-4 > train_v1_merged_30_90_attn_output.txt
