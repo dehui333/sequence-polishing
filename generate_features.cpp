@@ -456,7 +456,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
         if (rpos < pileup_iter->start()) continue;
         if (rpos >= pileup_iter->end()) break;
         unsigned int threshold_num = threshold_prop * column->count();
-        if (threshold_num == 0) threshold_num = 1;	
+        if (threshold_num == 0) threshold_num = 1;
         std::vector<segment> ins_segments;
         std::vector<uint32_t> no_ins_reads;
         bool col_has_enough_ins = false;

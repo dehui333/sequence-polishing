@@ -218,11 +218,11 @@ class Polisher(pl.LightningModule):
 def main():
     # argument parser
     parser = ArgumentParser()
-    parser.add_argument('datapath', type=str) # training set path or test set path
-    parser.add_argument('out', type=str) # output file (for train) / directory (for test) path
-    parser.add_argument('backbone', type=str) # choose attn or rnn
-    parser.add_argument('--valpath', type=str, default=None) # validation set path
-    parser.add_argument('--memory', action='store_true') # means that if not specified, default=False, if specified in command, memory=True
+    parser.add_argument('datapath', type=str) # training data directory or path if it is just one file
+    parser.add_argument('out', type=str) # directory to save model checkpoints
+    parser.add_argument('backbone', type=str) # choose attn 'Attention_roko' or rnn 'Original_roko'
+    parser.add_argument('--valpath', type=str, default=None) # validation data directory or path if it is just one file
+    parser.add_argument('--memory', action='store_true') # if not specified, default=False, if specified in command, memory=True
     parser.add_argument('--t', type=int, default=4) # number of threads
     parser.add_argument('--b', type=int, default=8) # batch size
     parser.add_argument('--p_keep', type=float, default=1) # lowest keep rate of block for stochastic depth, default=1 keeps everything
@@ -258,7 +258,7 @@ def main():
     
     # initialize trainer
     trainer = pl.Trainer.from_argparse_args(args,
-                                            gpus=[0,4,5,7],
+                                            gpus=[3,4,5,7],
                                             precision = 16,
                                             gradient_clip_val=1.0,
                                             logger=wandb_logger,
