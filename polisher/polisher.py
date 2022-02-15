@@ -15,7 +15,7 @@ from pytorch_lightning.utilities.cli import LightningCLI
 
 from evoformer import Evoformer, PositionalEncoding
 from roko_data_module import RokoDataModule
-import sys
+#import sys
 
 POSITIONAL_FEATURES = 5
 READ_FEATURES = 12
@@ -189,7 +189,7 @@ class Polisher(pl.LightningModule):
 
         train_acc_batch = self.train_accuracy(seq_logits, labels)
         self.log('train_acc', train_acc_batch)
-        sys.exit()
+        #sys.exit()
         
         return overall_loss
 
