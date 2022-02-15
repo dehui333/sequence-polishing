@@ -91,7 +91,7 @@ class InferenceDataset(Dataset):
 
 def infer(data, model_path, out, workers=0, batch_size=128):
     use_cuda = torch.cuda.is_available()
-    device = torch.device('cuda:3' if use_cuda else 'cpu')
+    device = torch.device('cuda:6' if use_cuda else 'cpu')
     print(device.type)
 
     
@@ -136,7 +136,7 @@ def infer(data, model_path, out, workers=0, batch_size=128):
                 print(f'{i + 1} batches processed')
 
     contigs = dataset.contigs
-    with open("/scratch/outputs/check_features/aux_file.txt", "w") as aux_file:
+    with open(str.split(out,'.fasta')[0]+"_aux_file.txt", "w") as aux_file:
         for contig in result:
             values = result[contig]
 

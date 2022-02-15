@@ -16,9 +16,14 @@ from torch.utils.data import Dataset, DataLoader
 #val_dataloader(s)
 #test_dataloader(s)
 
-class THEDataModule(pl.LightningDataModule):
+class RokoDataModule(pl.LightningDataModule):
     
-    def __init__(self, data_dir, batch_size, mem, val_path, workers):
+    def __init__(self, 
+                 data_dir: str, 
+                 val_path: str,
+                 batch_size: int = 32, 
+                 mem: bool = False,
+                 workers: int = 1):
         super().__init__()
         self.data_dir = data_dir
         self.batch_size = batch_size
