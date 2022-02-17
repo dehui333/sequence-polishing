@@ -87,7 +87,7 @@ class Polisher(pl.LightningModule):
                  attn_pos_dropout: float = 0.1,
                  reads_mask_prob: float = 0.2,
                  alpha: float = 0.1,
-                 lr=3e-4):
+                 lr=3e-4) -> None:
         super().__init__()
         #constructor
         self.save_hyperparameters()

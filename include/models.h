@@ -21,7 +21,7 @@ extern "C" {
 
     int iter_bam(void* data, bam1_t* b);
 
-    constexpr uint8_t min_mapping_quality = 10;
+    constexpr uint8_t min_mapping_quality = 1;
     constexpr uint16_t filter_flag = BAM_FUNMAP | BAM_FDUP | BAM_FQCFAIL | BAM_FSUPPLEMENTARY | BAM_FSECONDARY;
 }
 

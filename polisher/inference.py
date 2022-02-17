@@ -8,7 +8,7 @@ from torch.utils.data import Dataset, DataLoader
 import itertools
 #from rnn_model import *
 import numpy as np
-from polisher import Polisher
+from old_polisher import Polisher
 
 GPU_NUM = 1
 
