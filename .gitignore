@@ -3,6 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=c,c++,linux,python,pycharm+all,visualstudiocode
 
 Dependencies/
+yhes/
 wandb/
 *.log
 
