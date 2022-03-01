@@ -442,6 +442,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
     npy_intp dims[2];
     npy_intp dims2[2];
     npy_intp labels_dim[1];
+    srand(49);
     labels_dim[0] = dimensions[1];
     for (int i = 0; i < 2; i++) {
         dims[i] = dimensions[i];
@@ -622,6 +623,9 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             std::vector<uint32_t> valid(valid_aligns.begin(), valid_aligns.end());
            
             int valid_size = valid.size();
+            // when number of valid reads < threshold, then add draft base as reads for x times (comment this block off later)
+            //int num_draft = REF_ROWS;
+            //if(valid_size < 3) num_draft = 15;
 
             auto X = PyArray_SimpleNew(2, dims, NPY_UINT8);
             auto X2 = PyArray_SimpleNew(2, dims2, NPY_UINT16);
@@ -637,6 +641,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
                 if (curr->second != 0) value = ENCODED_BASES[Bases::GAP];
                 else value = ENCODED_BASES[get_base(draft[curr->first])];
 
+                // change this part back to 'for (int r = 0; r < REF_ROWS; r++)' later
                 for (int r = 0; r < REF_ROWS; r++) {
                     value_ptr = (uint8_t*) PyArray_GETPTR2(X, r, s);
                     *value_ptr = value; // Forward strand - no +6

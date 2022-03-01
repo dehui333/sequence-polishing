@@ -6,9 +6,10 @@ from collections import defaultdict, Counter
 import argparse
 from torch.utils.data import Dataset, DataLoader
 import itertools
-#from rnn_model import *
 import numpy as np
-from old_polisher import Polisher
+from v6_polisher import Polisher
+#from GPUtil import showUtilization as gpu_usage
+#from numba import cuda
 
 GPU_NUM = 1
 
@@ -89,13 +90,13 @@ class InferenceDataset(Dataset):
             self.fd.close()
 
 
-def infer(data, model_path, out, workers=0, batch_size=128):
+def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
     use_cuda = torch.cuda.is_available()
-    device = torch.device('cuda:6' if use_cuda else 'cpu')
-    print(device.type)
+    device = torch.device('cuda:'+gpu if use_cuda else 'cpu')
+    print(device)
 
     
-    model = Polisher.load_from_checkpoint(checkpoint_path=model_path, model_name = 'Attention_roko', embedding_dim=128, heads=8, evoformer_blocks=8, p_keep=1).to(device)
+    model = Polisher.load_from_checkpoint(checkpoint_path=model_path).to(device)
     model.freeze()
     #model = RNN(IN_SIZE, HIDDEN_SIZE, NUM_LAYERS).to(device)
     #model.load_state_dict(torch.load(model_path))
@@ -117,9 +118,14 @@ def infer(data, model_path, out, workers=0, batch_size=128):
     with torch.no_grad():
         for i, batch in enumerate(dataloader):
             c, pos, x, x2 = batch
-            x, x2 = x.type(torch.cuda.LongTensor if device.type == 'cuda' else torch.LongTensor), x2.type(torch.cuda.FloatTensor if device.type == 'cuda' else torch.FloatTensor)
-            x = x.to(device)
-            x2 = x2.to(device)
+            #print("device used:", device)
+            #print(x.shape,x2.shape)
+            #torch.cuda.memory_summary(device = 6) # why doesnt this print out anything??
+            #print("Initial GPU Usage")
+            #gpu_usage()
+            # x, x2 = x.type(torch.cuda.LongTensor if device.type == 'cuda' else torch.LongTensor), x2.type(torch.cuda.FloatTensor if device.type == 'cuda' else torch.FloatTensor)
+            x = x.to(device).long()
+            x2 = x2.to(device).float()
 
             logits = model(x,x2.transpose(1,2))
             Y = torch.argmax(logits, dim=2).long()
@@ -152,7 +158,7 @@ def infer(data, model_path, out, workers=0, batch_size=128):
             for i, p in enumerate(pos_sorted):
                 base, _ = values[p].most_common(1)[0]
                 # save the position and base to a file: 
-                aux_file.write(f'{p}\t{base}\n')
+                aux_file.write(f'{p}\t{base}\t{values[p]}\n')
 
                 if base == GAP:
                     continue
@@ -176,9 +182,10 @@ def main():
     parser.add_argument('out', type=str)
     parser.add_argument('--t', type=int, default=0)
     parser.add_argument('--b', type=int, default=32)
+    parser.add_argument('--gpu', type=str, default='6')
     args = parser.parse_args()
 
-    infer(args.data, args.model, args.out, args.t, args.b)
+    infer(args.data, args.model, args.out, args.t, args.b, args.gpu)
     print("done")
 
 

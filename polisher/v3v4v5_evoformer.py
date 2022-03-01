@@ -11,11 +11,11 @@ def depth_prob(p_lowest: float, layer: int, n_layers: int) -> float:
     return 1 - layer / n_layers * (1 - p_lowest)
 
 class PositionalEncoding(nn.Module):
-    def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 128): # d_model = embed_dim
+    def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 128): # d_model = embed_dim = E, max_len = seq_len = S
         super().__init__()
         self.dropout = nn.Dropout(p=dropout)
 
-        position = torch.arange(max_len).unsqueeze(1)
+        position = torch.arange(max_len).unsqueeze(1) # S x 1
         # torch.arange(max_len) returns tensor([ 0,  1,  2,  3,  4, ..., max_len-1])
         # torch.unsqueeze(x, 1) returns tensor([[ 1],
         #                                       [ 2],
@@ -24,7 +24,7 @@ class PositionalEncoding(nn.Module):
         #                                       [...]
         #                                       [max_len-1]])
         div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model)) # torch.arange(start, end, step), math.log() is actually ln()
-        pe = torch.zeros(max_len, d_model)
+        pe = torch.zeros(max_len, d_model) # S x E
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         self.register_buffer('pe', pe)
@@ -34,7 +34,7 @@ class PositionalEncoding(nn.Module):
         Args:
             x: Tensor, shape [batch_size, num_reads, seq_len, embedding_dim]
         """
-        x = x + self.pe[:x.size(-2)] # x.size(-2) = seq_len --> self.pe[:seq_len]
+        x = x + self.pe[:x.size(-2)] # pe S x E, x.size(-2) = seq_len --> self.pe[:seq_len], S x E
         # so self.pe[:x.size(-2)].shape = seq_len x d_model, x.shape = B R S E = B R seq_len d_model
         return self.dropout(x)
 

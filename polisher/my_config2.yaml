@@ -1,6 +1,6 @@
 fit:
   trainer:
-    gpus: [3,4,5,7]
+    gpus: [1,2,6]
     precision: 16
     gradient_clip_val: 1.0
     max_epochs: 100
@@ -17,8 +17,8 @@ fit:
       attn_pos_dropout: 0.1
       lr: 3e-4
   data:
-    data_dir: /scratch/features_30_90_with_pos_stat/v5/train
-    val_path: /scratch/features_30_90_with_pos_stat/v5/val
+    data_dir: /scratch/features_30_90_with_pos_stat/v6_added_seed_to_features/train
+    val_path: /scratch/features_30_90_with_pos_stat/v6_added_seed_to_features/val
     batch_size: 64
     mem: False
     workers: 4

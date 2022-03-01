@@ -13,7 +13,7 @@ from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.plugins import DDPPlugin
 from pytorch_lightning.utilities.cli import LightningCLI
 
-from evoformer import Evoformer, PositionalEncoding
+from v3v4v5_evoformer import Evoformer, PositionalEncoding
 from roko_data_module import RokoDataModule
 #import sys
 
@@ -84,7 +84,7 @@ class Polisher(pl.LightningModule):
                  attn_n_heads: int = 8,
                  attn_n_blocks: int = 8,
                  attn_depth_prob: float = 1.0,
-                 attn_pos_dropout: float = 0.1,
+                 attn_pos_dropout: float = 0.0,
                  reads_mask_prob: float = 0.2,
                  alpha: float = 0.1,
                  lr=3e-4) -> None:
@@ -215,7 +215,7 @@ def get_trainer_defaults() -> Dict[str, Any]:
         save_top_k=-1,
         #dirpath="/scratch/model", # how do we get this dir from user argument? 
         #Leave it unset in ModelCheckpoint instantiation, it will be set to trainer's weights_save_path or if it is also None then Trainer.default_root_dir.
-        filename='{epoch}-{val_loss:.5f}-{val_acc_epoch:.5f}')
+        filename='{epoch}-{val_loss:.5f}-{val_acc:.5f}')
 
 
     trainer_defaults = {
