@@ -8,8 +8,8 @@ from torch.utils.data import Dataset, DataLoader
 import itertools
 import numpy as np
 from v3_polisher import Polisher
-from GPUtil import showUtilization as gpu_usage
-from numba import cuda
+#from GPUtil import showUtilization as gpu_usage
+#from numba import cuda
 
 GPU_NUM = 1
 
@@ -110,7 +110,7 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
     records = []
 
     dataset = InferenceDataset(data, transform=ToTensor())
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=workers)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=workers, prefetch_factor = 1)
 
     info = []
 

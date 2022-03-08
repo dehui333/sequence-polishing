@@ -111,7 +111,7 @@ class Polisher(pl.LightningModule):
         
         gru_output = self.gru(pos_stat) # B S 2H
         attn_output = self.attn(reads) # B S E
-        output = torch.concat((attn_output[:,0], gru_output), 2) # B S (E+2H)
+        output = torch.cat((attn_output[:,0], gru_output), 2) # B S (E+2H)
 
         return self.fc(output)
 
@@ -125,7 +125,7 @@ class Polisher(pl.LightningModule):
         masked_output = self.maskfc(attn_output[mask]) # x[mask] = N_masked E --> self.fcmask(x[mask]) = N_masked 5
 
         # x (B R S E) -> take the first row of R dimension -> (B S E)
-        output = torch.concat((attn_output[:,0], gru_output), 2) # x B S E, pos_stat B S 2*H, output B S (E+2H)
+        output = torch.cat((attn_output[:,0], gru_output), 2) # x B S E, pos_stat B S 2*H, output B S (E+2H)
         
         # pass 'output' to linear layer --> self.fc(output) = BxSx5
         return self.fc(output), masked_output # B S 5 and N_masked 5

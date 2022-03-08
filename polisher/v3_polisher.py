@@ -109,7 +109,7 @@ class Polisher(pl.LightningModule):
             #print("pos_stat.shape",pos_stat.shape)
             pos_stat = F.relu(self.fc1(pos_stat)) # B S P
             pos_stat, _ = self.gru(pos_stat) # B S 256=2*hidden_size
-            out = torch.concat((x[:,0],pos_stat),2)
+            out = torch.cat((x[:,0],pos_stat),2)
 
             return self.fc4(out)
 
@@ -124,7 +124,7 @@ class Polisher(pl.LightningModule):
             #print("after gru: should be B S 2*H, 8 90 256",pos_stat.shape)
 
             # x (B R S E) -> take the first row of R dimension -> (B S E)
-            out = torch.concat((x[:,0],pos_stat),2) # x B S E, pos_stat B S 2*H out B S (E+2*Hidden_size)
+            out = torch.cat((x[:,0],pos_stat),2) # x B S E, pos_stat B S 2*H out B S (E+2*Hidden_size)
             #print("after concat: should be B S E+2*H, 8 90 128+256", out.shape)
             #sys.exit()
 

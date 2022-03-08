@@ -19,7 +19,7 @@ extern "C" {
 constexpr int dimensions[] = {30, 90}; 
 constexpr int dimensions2[] = {5, 90}; // dimensions for second matrix
 constexpr int WINDOW = dimensions[1] / 3;
-constexpr int REF_ROWS = 1;
+constexpr int REF_ROWS = 1; // ref_rows=1 to include draft in the feature
 constexpr float threshold_prop = 0; // need this proportion of reads to support a base(ACTG) in the position to include it
 constexpr unsigned int align_len_threshold = 0; // need avg ins len >= this at the position to align it 
 
