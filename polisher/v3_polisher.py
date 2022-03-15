@@ -10,7 +10,7 @@ import torchmetrics
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.plugins import DDPPlugin
-from progressbar import ProgressBar
+#from progressbar import ProgressBar
 from v3v4v5_evoformer import Evoformer
 from roko_data_module import RokoDataModule
 

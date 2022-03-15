@@ -1,5 +1,5 @@
 trainer:
-  gpus: [1,2,6]
+  gpus: [0,1,2,3]
   precision: 16
   gradient_clip_val: 1.0
   max_epochs: 100
@@ -18,6 +18,6 @@ model:
 data:
   data_dir: /raid/scratch/wuws/docker/merged/features_30_90_with_pos_stat/v7_using_flye_draft/train
   val_path: /raid/scratch/wuws/docker/merged/features_30_90_with_pos_stat/v7_using_flye_draft/val
-  batch_size: 64
+  batch_size: 32
   mem: False
   workers: 4

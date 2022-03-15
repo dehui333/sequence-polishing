@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.nn.init as init
 import torchmetrics
+import os
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.plugins.training_type.ddp import DDPPlugin
@@ -164,9 +165,7 @@ class Polisher(pl.LightningModule):
                                     high = 5, 
                                     size=reads[mask].size(), 
                                     dtype=torch.uint8, 
-                                    device=self.device) + torch.div(reads[mask], 
-                                                                    6, 
-                                                                    rounding_mode='floor')*6
+                                    device=self.device) + torch.div(reads[mask], 6, rounding_mode = 'floor')*6
         return mask_target, mask
 
 
@@ -220,11 +219,10 @@ def get_trainer_defaults() -> Dict[str, Any]:
         #Leave it unset in ModelCheckpoint instantiation, it will be set to trainer's weights_save_path or if it is also None then Trainer.default_root_dir.
         filename='{epoch}-{val_loss:.5f}-{val_acc:.5f}')
 
-
     trainer_defaults = {
         'callbacks': [checkpoint_callback],
-        'logger': WandbLogger(project='docker_roko', log_model='all', save_dir='/scratch/sequence-polishing/polisher/runs'), # weights and biases
-        'strategy': DDPPlugin(find_unused_parameters = True) # WHY DOES THIS RETURN NONE?!
+        'logger': WandbLogger(project='docker_roko', log_model='all', save_dir=os.getcwd()), # weights and biases
+        'strategy': DDPPlugin(find_unused_parameters = True) # 'strategy' parameter requires pytorch lightning v1.5 and above
     }
 
     return trainer_defaults
