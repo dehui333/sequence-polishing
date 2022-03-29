@@ -84,6 +84,11 @@ class TrainDataset(StorageDataset):
         X = group['examples'][offset]
         Y = group['labels'][offset]
         X2 = group['stats'][offset] # 5 90
+        
+        # del the print statements later: check if before and after are the same data types
+        print("before",type(X2[0][0]))
+        X2 = X2.astype(np.int16)
+        print("after",type(X2[0][0]))
 
         return X, Y, np.nan_to_num(X2/np.sum(X2,axis=0))
 

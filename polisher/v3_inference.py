@@ -75,6 +75,10 @@ class InferenceDataset(Dataset):
         X = group['examples'][p]
         X2 = group['stats'][p]
         position = group['positions'][p]
+        # del the print statements later: check if before and after are the same data types
+        print("before",type(X2[0][0]))
+        X2 = X2.astype(np.int16)
+        print("after",type(X2[0][0]))
 
         sample = (contig, position, X, np.nan_to_num(X2/np.sum(X2,axis=0)))
         if self.transform:
@@ -155,7 +159,24 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
 
             aux_file.write(f'{contig}\n')
 
+            # after dropping positions
+            patch_start = first
+            patch_end = first
+            ###
+
             for i, p in enumerate(pos_sorted):
+                # after dropping positions
+                if p[0] > patch_start or (p[0] == patch_start and p[1] > 0):
+                    if p[1] == 0:
+                        patch_end = p[0]
+                    else:
+                        patch_end = p[0] + 1
+                    seq += contig_data[0][patch_start:patch_end]
+                    patch_start = patch_end
+                if p[1] == 0:
+                    patch_start += 1
+                ###
+
                 base, _ = values[p].most_common(1)[0]
                 # save the position and base to a file: 
                 aux_file.write(f'{p}\t{base}\t{values[p]}\n')

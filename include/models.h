@@ -25,7 +25,8 @@ extern "C" {
     constexpr uint16_t filter_flag = BAM_FUNMAP | BAM_FDUP | BAM_FQCFAIL | BAM_FSUPPLEMENTARY | BAM_FSECONDARY;
 }
 
-enum class Bases {A, C, G, T, GAP, UNKNOWN};
+	
+enum class Bases {A = 0, C = 1, G = 2, T = 3, GAP = 4, UNKNOWN= 5};
 
 Bases get_base(char b);
 
@@ -112,6 +113,7 @@ public:
     long ref_start() {return read_->b->core.pos;};
     long ref_end() {return bam_endpos(read_->b);};
     bool rev() {return bam_is_rev(read_->b);};
+    uint8_t mqual() {return read_->b->core.qual;};
 
 protected:
     const bam_pileup1_t* read_;
@@ -145,7 +147,7 @@ inline uint8_t Alignment::qqual(int offset) {
         return qual_string[read_->qpos + offset];
     }
 
-    return 10;
+    return 10; // not important
 }
 
 inline Bases get_base(char b) {

@@ -26,5 +26,5 @@ if __name__ == "__main__":
 
       setup(
         name='gen',
-        version='0.0.3',
+        version='0.0.4',
         configuration=configuration)

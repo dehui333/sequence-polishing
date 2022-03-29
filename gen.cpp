@@ -13,10 +13,9 @@ static PyObject* generate_features_cpp(PyObject *self, PyObject *args) {
 
     char *filename, *ref, *region;
     PyObject* dict = NULL;
-    int inference_mode = -1;
 
-    if (!PyArg_ParseTuple(args, "sssOi", &filename, &ref, &region, &dict, &inference_mode)) return NULL;
-    FeatureGenerator feature_generator {filename, ref, region, dict, static_cast<bool>(inference_mode)};
+    if (!PyArg_ParseTuple(args, "sssO", &filename, &ref, &region, &dict)) return NULL;
+    FeatureGenerator feature_generator {filename, ref, region, dict};
     auto result = feature_generator.generate_features();
     PyObject* return_tuple = PyTuple_New(4);
     PyObject* pos_list = PyList_New(result->positions.size());

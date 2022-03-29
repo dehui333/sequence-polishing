@@ -7,7 +7,7 @@ import argparse
 from torch.utils.data import Dataset, DataLoader
 import itertools
 import numpy as np
-from v4v5_polisher import Polisher
+from v6v7v8_polisher import Polisher
 #from GPUtil import showUtilization as gpu_usage
 #from numba import cuda
 
@@ -77,9 +77,11 @@ class InferenceDataset(Dataset):
         position = group['positions'][p]
 
         # del the print statements later: check if before and after are the same data types
-        print("before",type(X2[0][0]))
-        X2 = X2.astype(np.int16)
-        print("after",type(X2[0][0]))
+        #print("before",type(X2[0][0])) # before <class 'numpy.uint16'>
+
+        #X2 = X2.astype(np.int16)
+
+        #print("after",type(X2[0][0])) # after <class 'numpy.int16'>
 
         sample = (contig, position, X, np.nan_to_num(X2/np.sum(X2,axis=0)))
         if self.transform:
@@ -177,7 +179,7 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
                 if p[1] == 0:
                     patch_start += 1
                 ###
-                
+
                 base, _ = values[p].most_common(1)[0]
                 # save the position and base to a file: 
                 aux_file.write(f'{p}\t{base}\t{values[p]}\n')

@@ -14,7 +14,7 @@ from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.plugins.training_type.ddp import DDPPlugin
 from pytorch_lightning.utilities.cli import LightningCLI
 
-from v6v7_evoformer import Evoformer, PositionalEncoding
+from v6v7v8_evoformer import Evoformer, PositionalEncoding
 from roko_data_module import RokoDataModule
 #import sys
 
