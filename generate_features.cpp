@@ -206,6 +206,7 @@ void FeatureGenerator::pos_queue_push(std::pair<pos_index_t, pos_index_t>& index
             // result feature's insertion index might not be continuous
             // e.g. if (45,3) does not have enough supporting reads but (45,4) does then (45,3) is skipped
             //num_filter++;
+            align_info.erase(index);
             return;
         }
     } 
@@ -227,9 +228,12 @@ void FeatureGenerator::pos_queue_push(std::pair<pos_index_t, pos_index_t>& index
 
 // should have at least num elements in the deque container
 void FeatureGenerator::pos_queue_pop(uint16_t num) {
+    for (auto it = pos_queue.begin(), end = pos_queue.begin() + num; it != end; ++it) {
+        align_info.erase(*it);
+    }
     
     pos_queue.erase(pos_queue.begin(), pos_queue.begin() + num);
-    while (distances.size() > 0 && num >=(distances.front()+1)) { /
+    while (distances.size() > 0 && num >=(distances.front()+1)) {
         num -= distances.front() + 1; 
         distances.pop();
     }
@@ -413,8 +417,9 @@ void FeatureGenerator::align_center_star(pos_index_t base_index, std::vector<seg
 
         }
 
-        pos_queue_push(index); 
+
         align_info[index] = star_positions[i];
+        pos_queue_push(index); 
         if (has_labels) {
             labels_info[index] = star_positions_labels[i];
         }
@@ -733,9 +738,6 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             data->X2.push_back(X2);
             data->Y.push_back(Y);
             data->positions.emplace_back(pos_queue.begin(), pos_queue.begin() + dimensions[1]);
-            for (auto it = pos_queue.begin(), end = pos_queue.begin() + WINDOW; it != end; ++it) {
-                align_info.erase(*it);
-            }
             pos_queue_pop(WINDOW);
         }
     } 
