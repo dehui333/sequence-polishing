@@ -123,7 +123,9 @@ def main():
                 a = (args.X, r, region) if inference else (args.X, args.Y, r, region)
                 arguments.append(a)
             
-        
+        # test save_val_result
+        #arguments = arguments[:5] # only generate 5 regions
+        #####
         
         
         print(f'Data generation started, number of jobs: {len(arguments)}.')

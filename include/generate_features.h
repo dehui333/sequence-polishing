@@ -22,8 +22,6 @@ constexpr int dimensions[] = {30, 90};
 constexpr int dimensions2[] = {5, 90}; // dimensions for second matrix
 constexpr int WINDOW = dimensions[1] / 3;
 constexpr int REF_ROWS = 1; // ref_rows=1 to include draft in the feature
-//constexpr float threshold_prop = 0; // need this proportion of reads to support a base(ACTG) in the position to include it
-//constexpr unsigned int align_len_threshold = 0; // need avg ins len >= this at the position to align it 
 
 constexpr float UNCERTAIN_POSITION_THRESHOLD = 0.15;
 constexpr float NON_GAP_THRESHOLD = 0.01;
@@ -50,10 +48,6 @@ struct PosStats {
     uint16_t n_G = 0;
     uint16_t n_T = 0;
 
-    uint16_t n_bq = 0;
-    uint16_t n_mq = 0;
-    float avg_bq = 0;
-    float avg_mq = 0;
     uint16_t largest_diff = 0; // frequency of the most common alternative nucleotide, by default it is 0 so there is no base disagreeing with draft
     // which means that at any position, if there are bases that do not agree with the draft 
     // the disagreeing base with the highest frequency will be the most common alternative nucleotide
@@ -97,6 +91,7 @@ class FeatureGenerator {
 
         bool has_labels;
         uint16_t counter = 0;
+        pos_index_t last_id1 = -1;
         
         // store progress
         std::unordered_map<std::pair<pos_index_t, pos_index_t>, uint8_t, pair_hash> labels;
@@ -116,8 +111,7 @@ class FeatureGenerator {
             std::string sequence;
             uint64_t index;
             uint8_t mq;
-            std::vector<uint8_t> bqs; // bqs of all bases in this segment: the 1st is the bq of the base before ins segment, the last is after
-            segment(std::string seq, int id, uint8_t mq, std::vector<uint8_t> bqs) : sequence(seq), index(id), mq(mq), bqs(bqs) {};
+            segment(std::string seq, int id, uint8_t mq) : sequence(seq), index(id), mq(mq) {};
             segment(std::string seq, int id) : sequence(seq), index(id) {};
         };
 
@@ -126,13 +120,13 @@ class FeatureGenerator {
         char forward_int_to_char(uint8_t i);
         uint8_t char_to_forward_int(char c);
             
-        void align_center_star(pos_index_t base_index, std::vector<segment>& segments, int star_index,
+        void align_to_target(pos_index_t base_index, std::vector<segment>& segments, int target_index,
             std::vector<segment>& no_ins_reads);
 
-        void align_ins_longest_star(pos_index_t base_index, std::vector<segment>& ins_segments, 
+        void align_ins_longest(pos_index_t base_index, std::vector<segment>& ins_segments, 
             std::vector<segment>& no_ins_reads);
 
-        void align_ins_center_star(pos_index_t base_index, std::vector<segment>& ins_segments,
+        void align_ins_center(pos_index_t base_index, std::vector<segment>& ins_segments,
             std::vector<segment>& no_ins_reads);
 
         int find_center(std::vector<segment>& segments);
@@ -148,6 +142,8 @@ class FeatureGenerator {
         void add_mq_sample(std::pair<pos_index_t, pos_index_t>& index, uint8_t mq);
 
         void pos_queue_push(std::pair<pos_index_t, pos_index_t>& index);
+
+        void pos_queue_pad(pos_index_t id1);
 
         void pos_queue_pop(uint16_t num);
 
