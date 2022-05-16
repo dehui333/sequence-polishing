@@ -69,7 +69,7 @@ class StorageDataset(Dataset):
         perm = np.random.permutation(sample[0].shape[0])
         perm = np.delete(perm, np.where(perm == 0))
         perm = np.insert(perm, 0, 0)
-        tup = (sample[0][perm], sample[1], sample[2])
+        tup = (sample[0][perm], sample[1], sample[2], sample[3])
 
         if self.transform:
             tup = self.transform(tup)
@@ -84,13 +84,14 @@ class TrainDataset(StorageDataset):
         X = group['examples'][offset]
         Y = group['labels'][offset]
         X2 = group['stats'][offset] # 5 90
+        X3 = group['cov'][offset] # 1 90
         
         # del the print statements later: check if before and after are the same data types
-        print("before",type(X2[0][0]))
-        X2 = X2.astype(np.int16)
-        print("after",type(X2[0][0]))
+        #print("before",type(X2[0][0]))
+        #X2 = X2.astype(np.int16)
+        #print("after",type(X2[0][0]))
 
-        return X, Y, np.nan_to_num(X2/np.sum(X2,axis=0))
+        return X, Y, np.nan_to_num(X2/np.sum(X2,axis=0)), X3
 
 
 class InMemoryTrainDataset(Dataset):
@@ -98,8 +99,9 @@ class InMemoryTrainDataset(Dataset):
         self.filenames = get_filenames(path)
 
         self.X = []
-        self.Y = []
         self.X2 = []
+        self.X3 = []
+        self.Y = []
 
         for filename in self.filenames:
             with h5py.File(filename, 'r') as f:
@@ -113,20 +115,22 @@ class InMemoryTrainDataset(Dataset):
                     X = f[g]['examples'][()]
                     Y = f[g]['labels'][()]
                     X2 = f[g]['stats'][()]
+                    X3 = f[g]['cov'][()]
 
                     self.X.extend(list(X))
                     self.Y.extend(list(Y))
                     self.X2.extend(list(X2))
+                    self.X3.extend(list(X3))
 
             print(f'Processed: {filename}')
 
-        assert len(self.X) == len(self.Y) == len(self.X2)
+        assert len(self.X) == len(self.Y) == len(self.X2) == len(self.X3)
         self.size = len(self.X)
 
         self.transform = transform
 
     def __getitem__(self, idx):
-        sample = (self.X[idx], self.Y[idx], self.X2[idx])
+        sample = (self.X[idx], self.Y[idx], self.X2[idx], self.X3[idx])
         if self.transform:
             sample = self.transform(sample)
 
@@ -138,5 +142,5 @@ class InMemoryTrainDataset(Dataset):
 
 class TrainToTensor:
     def __call__(self, sample):
-        X, Y, X2 = sample
-        return torch.from_numpy(X), torch.from_numpy(Y), torch.from_numpy(X2)
+        X, Y, X2, X3 = sample
+        return torch.from_numpy(X), torch.from_numpy(Y), torch.from_numpy(X2), torch.from_numpy(X3)

@@ -14,8 +14,6 @@ extern "C" {
         int status;
         PileupData* plp_data = (PileupData*) data;
 
-        //std::cout << "min_mapping_quality: (should be 1 now) " << int(min_mapping_quality) << "\n";
-
         while (1) {
             if (plp_data->iter) {
                 status = sam_itr_next(plp_data->file, plp_data->iter, b);
@@ -32,6 +30,28 @@ extern "C" {
         
         return status;
     }
+
+    int iter_bam2(void* data, bam1_t* b) {
+        int status;
+        PileupData* plp_data = (PileupData*) data;
+
+        while (1) {
+            if (plp_data->iter) {
+                status = sam_itr_next(plp_data->file, plp_data->iter, b);
+            } else {
+                status = sam_read1(plp_data->file, plp_data->header, b);
+            }
+            if (status < 0) break;
+
+            if (b->core.flag & filter_flag2) continue;
+            if (b->core.flag & BAM_FPAIRED && ((b->core.flag & BAM_FPROPER_PAIR) == 0)) continue;
+            if (b->core.qual < min_mapping_quality2) continue;
+            break;
+        }
+        
+        return status;
+    }
+
 }
 
 RegionInfo::RegionInfo(std::string n, int s, int e): name(std::move(n)), start(s), end(e) {}
@@ -72,7 +92,7 @@ std::unique_ptr<RegionInfo> get_region(const std::string& region) {
     return std::unique_ptr<RegionInfo>(new RegionInfo(std::move(contig), start, end));
 }
 
-std::unique_ptr<PositionIterator> BAMFile::pileup(const std::string& region) {
+std::unique_ptr<PositionIterator> BAMFile::pileup(const std::string& region, bool inclusive) {
     std::unique_ptr<PileupData> data(new PileupData);
 
     data->file = this->bam_.get(); data->header = this->header_.get();
@@ -80,7 +100,12 @@ std::unique_ptr<PositionIterator> BAMFile::pileup(const std::string& region) {
 
     // Creating multi-iterator
     auto data_raw = data.get();
-    bam_mplp_t mplp = bam_mplp_init(1, iter_bam, (void **) &data_raw);
+    bam_mplp_t mplp;
+    if (inclusive) {
+        mplp = bam_mplp_init(1, iter_bam2, (void **) &data_raw);
+    } else {
+        mplp = bam_mplp_init(1, iter_bam, (void **) &data_raw);
+    }
     std::unique_ptr<__bam_mplp_t, decltype(&bam_mplp_destroy)> mplp_iter(mplp, bam_mplp_destroy);
 
     // Pointer to data array for one position

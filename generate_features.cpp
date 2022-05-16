@@ -60,9 +60,20 @@ static constexpr uint8_t CHAR_TO_FORWARD_INT_MAP[] = {
 // changes int values (forward strand, 0-5) to char
 static constexpr char FORWARD_INT_TO_CHAR_MAP[] = {'A', 'C', 'G', 'T', '*', 'N'};
 
-FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const char* region, PyObject* dict): draft(ref) {
+FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const char* region, PyObject* dict, uint16_t median, uint16_t mad): draft(ref) {
     
     bam = readBAM(filename);
+    auto pileup_inclusive = bam->pileup(region, true);
+    uint32_t i = 0;
+    while (pileup_inclusive->has_next()) {
+        auto column = pileup_inclusive->next();
+        long rpos = column->position;
+        if (rpos < pileup_inclusive->start()) continue;
+        if (rpos >= pileup_inclusive->end()) break;
+        auto& stat = stats_info[std::make_pair(rpos, 0)];
+        stat.normalized_cov = (column->count() - (float) median) / mad;
+    }
+
     pileup_iter = bam->pileup(region);
     if (dict == Py_None) { 
         has_labels = false;
@@ -511,15 +522,17 @@ void FeatureGenerator::align_ins_center(pos_index_t base_index, std::vector<segm
 std::unique_ptr<Data> FeatureGenerator::generate_features() {   
     npy_intp dims[2]; // dimensions of X1 (2d)
     npy_intp dims2[2]; // dimensions of X2 (2d)
+    npy_intp dims3[2]; // dimentions of X3 (1d)
     npy_intp labels_dim[1]; // dimensions of labels (1d)
     srand(49);
     labels_dim[0] = dimensions[1]; // labels_dim[0] = S
     for (int i = 0; i < 2; i++) {
         dims[i] = dimensions[i]; // dimensions[0] = R, dimensions[1] = S
         dims2[i] = dimensions2[i]; // dimensions2[0] = 5, dimensions2[1] = S
+        dims3[i] = dimensions3[i]; // dimensions3[0] = 1, dimensions3[1] = S
     }
  
-    auto data = std::unique_ptr<Data>(new Data()); // positions, X, Y, X2
+    auto data = std::unique_ptr<Data>(new Data()); // positions, X, Y, X2, X3
     
     // for each position in draft
     while (pileup_iter->has_next()) {
@@ -640,10 +653,12 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
 
             auto X = PyArray_SimpleNew(2, dims, NPY_UINT8);
             auto X2 = PyArray_SimpleNew(2, dims2, NPY_UINT16);
+            auto X3 = PyArray_SimpleNew(2, dims3, NPY_FLOAT);
             auto Y = PyArray_SimpleNew(1, labels_dim, NPY_UINT8);
             
             uint8_t* value_ptr;
             uint16_t *value_ptr_16;
+            float* value_ptr_float;
 
             // First handle assembly (REF_ROWS)
             for (auto s = 0; s < dimensions[1]; s++) {
@@ -672,6 +687,16 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
                 *value_ptr_16 = pos_stats.n_G;
                 value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 4, s);
                 *value_ptr_16 = pos_stats.n_T;
+
+                value_ptr_float = (float*) PyArray_GETPTR2(X3, 0, s);
+            
+                if (curr->second == 0) {
+                    *value_ptr_float = pos_stats.normalized_cov;
+    
+                } else {
+                    auto& stats = stats_info[std::make_pair(curr->first, 0)];
+                    *value_ptr_float = stats.normalized_cov;
+                }
                 
             }
 
@@ -720,6 +745,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             data->X.push_back(X);
             data->X2.push_back(X2);
             data->Y.push_back(Y);
+            data->X3.push_back(X3);
             data->positions.emplace_back(pos_queue.begin(), pos_queue.begin() + dimensions[1]);
             pos_queue_pop(WINDOW);
         }

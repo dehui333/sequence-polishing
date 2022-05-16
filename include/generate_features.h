@@ -20,6 +20,7 @@ typedef uint32_t pos_index_t;
 
 constexpr int dimensions[] = {30, 90}; 
 constexpr int dimensions2[] = {5, 90}; // dimensions for second matrix
+constexpr int dimensions3[] = {1, 90};
 constexpr int WINDOW = dimensions[1] / 3;
 constexpr int REF_ROWS = 1; // ref_rows=1 to include draft in the feature
 
@@ -32,6 +33,7 @@ struct Data{
     std::vector<PyObject*> X;
     std::vector<PyObject*> Y;
     std::vector<PyObject*> X2;
+    std::vector<PyObject*> X3;
 };
 
 struct PosInfo{
@@ -52,7 +54,7 @@ struct PosStats {
     // which means that at any position, if there are bases that do not agree with the draft 
     // the disagreeing base with the highest frequency will be the most common alternative nucleotide
     // 2 conditions must be met: the base disagrees with the draft, it has the highest frequency among the alternative bases
-
+    float normalized_cov = 0;
     //PosStats() : avg_mq(0), n_mq(0), avg_pq(0), n_pq(0) {};
     
     
@@ -148,7 +150,7 @@ class FeatureGenerator {
         void pos_queue_pop(uint16_t num);
 
     public:
-        FeatureGenerator(const char* filename, const char* ref, const char* region, PyObject* dict);   
+        FeatureGenerator(const char* filename, const char* ref, const char* region, PyObject* dict, uint16_t median, uint16_t mad);   
 
         std::unique_ptr<Data> generate_features();
 };
