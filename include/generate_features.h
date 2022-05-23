@@ -19,8 +19,8 @@ extern "C" {
 typedef uint32_t pos_index_t;
 
 constexpr int dimensions[] = {30, 90}; 
-constexpr int dimensions2[] = {5, 90}; // dimensions for second matrix
-constexpr int dimensions3[] = {1, 90};
+constexpr int dimensions2[] = {5, 90};
+constexpr int dimensions3[] = {1, 90}; // x3
 constexpr int WINDOW = dimensions[1] / 3;
 constexpr int REF_ROWS = 1; // ref_rows=1 to include draft in the feature
 
@@ -33,29 +33,26 @@ struct Data{
     std::vector<PyObject*> X;
     std::vector<PyObject*> Y;
     std::vector<PyObject*> X2;
-    std::vector<PyObject*> X3;
+    std::vector<PyObject*> X3; // x3
 };
 
 struct PosInfo{
     Bases base;
-
-    PosInfo(Bases b) : base(b) {};
+    uint8_t mq;
+    PosInfo(Bases b, uint8_t mq) : base(b), mq(mq) {};
 };
 
 struct PosStats {
-    uint16_t n_total = 0;
-    uint16_t n_GAP = 0;
-    uint16_t n_A = 0;
-    uint16_t n_C = 0;
-    uint16_t n_G = 0;
-    uint16_t n_T = 0;
+    uint32_t n_total = 0;
+    uint32_t n_GAP = 0;
+    uint32_t n_A = 0;
+    uint32_t n_C = 0;
+    uint32_t n_G = 0;
+    uint32_t n_T = 0;
 
-    uint16_t largest_diff = 0; // frequency of the most common alternative nucleotide, by default it is 0 so there is no base disagreeing with draft
-    // which means that at any position, if there are bases that do not agree with the draft 
-    // the disagreeing base with the highest frequency will be the most common alternative nucleotide
-    // 2 conditions must be met: the base disagrees with the draft, it has the highest frequency among the alternative bases
-    float normalized_cov = 0;
-    //PosStats() : avg_mq(0), n_mq(0), avg_pq(0), n_pq(0) {};
+    uint32_t largest_diff = 0; 
+    
+    float normalized_cov = 0; // x3
     
     
 };
@@ -72,7 +69,7 @@ struct EnumClassHash
 extern std::unordered_map<Bases, uint8_t, EnumClassHash> ENCODED_BASES;
 
 struct pair_hash {
-    template <class T1, class T2> // p is a pointer pointing to pair, which is the key to be hashed
+    template <class T1, class T2>
     std::size_t operator () (const std::pair<T1,T2> &p) const {
         auto h1 = std::hash<T1>{}(p.first);
         auto h2 = std::hash<T2>{}(p.second);
@@ -93,21 +90,17 @@ class FeatureGenerator {
 
         bool has_labels;
         uint16_t counter = 0;
-        pos_index_t last_id1 = -1;
         
         // store progress
         std::unordered_map<std::pair<pos_index_t, pos_index_t>, uint8_t, pair_hash> labels;
-        std::deque<std::pair<pos_index_t, pos_index_t>> pos_queue; // double ended queue
+        std::deque<std::pair<pos_index_t, pos_index_t>> pos_queue;
         std::unordered_map<std::pair<pos_index_t, pos_index_t>, std::unordered_map<uint32_t, PosInfo>, pair_hash> align_info;
         std::unordered_map<std::pair<pos_index_t, pos_index_t>, uint8_t, pair_hash> labels_info;
         std::unordered_map<uint32_t, std::pair<pos_index_t, pos_index_t>> align_bounds;
         std::unordered_map<uint32_t, bool> strand;
         std::unordered_map<std::pair<pos_index_t, pos_index_t>, PosStats, pair_hash> stats_info;
-        // how far away is each uncertain position away from the previous one
-        // or the start of the queue
+
         std::queue<uint16_t> distances; 
-        // Deque is short for "Double ended queue" -> Queue: you can insert only in one end and remove from the other.
-        // Deque: you can insert and remove from both ends.
 
         struct segment {
             std::string sequence;
@@ -137,15 +130,9 @@ class FeatureGenerator {
 
         void convert_py_labels_dict(PyObject *dict);
 
-        void increment_base_count(std::pair<pos_index_t, pos_index_t>& index, Bases b);
-
-        void add_bq_sample(std::pair<pos_index_t, pos_index_t>& index, float bq);
-
-        void add_mq_sample(std::pair<pos_index_t, pos_index_t>& index, uint8_t mq);
+        void increment_base_count(std::pair<pos_index_t, pos_index_t>& index, PosInfo& pos_info);
 
         void pos_queue_push(std::pair<pos_index_t, pos_index_t>& index);
-
-        void pos_queue_pad(pos_index_t id1);
 
         void pos_queue_pop(uint16_t num);
 

@@ -118,7 +118,7 @@ def main():
             contig_names.append(pair[0])
             contig_lens.append(len(pair[1]))
                 
-    gen.initialize(args.X, contig_names, contig_lens)
+    gen.initialize(args.X, contig_names, contig_lens) # x3
         
 
     with DataWriter(args.o, inference) as data:

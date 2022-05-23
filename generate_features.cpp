@@ -13,6 +13,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <chrono>
 
 #include "edlib.h"
 #include "generate_features.h"
@@ -63,7 +64,9 @@ static constexpr char FORWARD_INT_TO_CHAR_MAP[] = {'A', 'C', 'G', 'T', '*', 'N'}
 FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const char* region, PyObject* dict, uint16_t median, uint16_t mad): draft(ref) {
     
     bam = readBAM(filename);
+    // normalized_median_cov  // x3
     auto pileup_inclusive = bam->pileup(region, true);
+    
     uint32_t i = 0;
     while (pileup_inclusive->has_next()) {
         auto column = pileup_inclusive->next();
@@ -72,7 +75,7 @@ FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const 
         if (rpos >= pileup_inclusive->end()) break;
         auto& stat = stats_info[std::make_pair(rpos, 0)];
         stat.normalized_cov = (column->count() - (float) median) / mad;
-    }
+    } // x3
 
     pileup_iter = bam->pileup(region);
     if (dict == Py_None) { 
@@ -125,9 +128,11 @@ void FeatureGenerator::convert_py_labels_dict(PyObject *dict) {
 }
 
 
-void FeatureGenerator::increment_base_count(std::pair<pos_index_t, pos_index_t>& index, Bases b) {
+void FeatureGenerator::increment_base_count(std::pair<pos_index_t, pos_index_t>& index, PosInfo& pos_info) {
+    Bases b = pos_info.base;
+    uint8_t mq = pos_info.mq;
     auto& s = stats_info[index];
-    s.n_total++;
+    s.n_total += mq;
     Bases draft_base = Bases::GAP;
     // index here is a pair of indices: index.first = draft_base index, index.second = insertion index
     if (index.second == 0) {
@@ -136,31 +141,31 @@ void FeatureGenerator::increment_base_count(std::pair<pos_index_t, pos_index_t>&
     bool diff = draft_base != b;
     switch(b) {
         case Bases::A:
-            s.n_A++;
+            s.n_A += mq;
             if (diff && s.n_A > s.largest_diff) {
                s.largest_diff = s.n_A;
             }
             break;
         case Bases::C:
-            s.n_C++;
+            s.n_C += mq;
             if (diff && s.n_C > s.largest_diff) {
                 s.largest_diff = s.n_C;
             }
             break;
         case Bases::G:
-            s.n_G++;
+            s.n_G += mq;
             if (diff && s.n_G > s.largest_diff) {
                 s.largest_diff = s.n_G;
             }
             break;
         case Bases::T:
-            s.n_T++;
+            s.n_T += mq;
             if (diff && s.n_T > s.largest_diff) {
                 s.largest_diff = s.n_T;
             }
             break;
         case Bases::GAP:
-            s.n_GAP++;
+            s.n_GAP += mq;
             if (diff && s.n_GAP > s.largest_diff) {
                 s.largest_diff = s.n_GAP;
             }
@@ -191,35 +196,6 @@ uint8_t FeatureGenerator::char_to_forward_int(char c) {
     return CHAR_TO_FORWARD_INT_MAP[static_cast<uint8_t>(c)];
 }
 
-void FeatureGenerator::pos_queue_pad(pos_index_t id1) {
-    std::pair<pos_index_t, pos_index_t> index = std::make_pair(id1, 0);
-    auto& s = stats_info[index];
-    s.n_total = 1;
-    Bases draft_base = char_to_base(draft[id1]);
-    switch(draft_base) {
-        case Bases::A:
-            s.n_A++;
-            break;
-        case Bases::C:
-            s.n_C++;
-            break;
-        case Bases::G:
-            s.n_G++;
-            break;
-        case Bases::T:
-            s.n_T++;
-            break;
-        case Bases::GAP:
-            s.n_GAP++;
-            break;
-        case Bases::UNKNOWN:
-            std::cout << "Unknown base!" << std::endl;
-    }
-    last_id1 = id1;
-    pos_queue.push_back(index);
-    counter++;
-}
-
 
 // this function will be called for each index
 void FeatureGenerator::pos_queue_push(std::pair<pos_index_t, pos_index_t>& index) {
@@ -228,17 +204,8 @@ void FeatureGenerator::pos_queue_push(std::pair<pos_index_t, pos_index_t>& index
     uint16_t num_total = s.n_total;
     if (index.second != 0) { // if this is an inserted base
         if (num_total == 0 || (float) s.largest_diff/ num_total < NON_GAP_THRESHOLD) { // NON_GAP_THRESHOLD = 0.01
-            // result feature's insertion index might not be continuous
-            // e.g. if (45,3) does not have enough supporting reads but (45,4) does then (45,3) is skipped
             align_info.erase(index);
             return;
-        }
-    }
-    if (index.first != 0) {
-        if (last_id1 < index.first - 1) {
-            for (pos_index_t i = last_id1 + 1; i < index.first; i++) {
-                pos_queue_pad(i);
-            }
         }
     }
     if ((float) s.largest_diff/num_total >= UNCERTAIN_POSITION_THRESHOLD) { // UNCERTAIN_POSITION_THRESHOLD = 0.15
@@ -246,23 +213,22 @@ void FeatureGenerator::pos_queue_push(std::pair<pos_index_t, pos_index_t>& index
     } 
     if (is_uncertain) {
         pos_queue.push_back(index);
-        distances.push(counter); // records all numbers of certain positions between uncertain positions
+        distances.push(counter);
         counter = 0;
 
     } else {
         pos_queue.push_back(index);
-        counter++; // counts the number of certain positions between any 2 uncertain positions
+        counter++;
     }
-    last_id1 = index.first;
 }
 
-// should have at least num elements in the deque container
 void FeatureGenerator::pos_queue_pop(uint16_t num) {
     for (auto it = pos_queue.begin(), end = pos_queue.begin() + num; it != end; ++it) {
         align_info.erase(*it);
     }
     
     pos_queue.erase(pos_queue.begin(), pos_queue.begin() + num);
+    
     while (distances.size() > 0 && num >=(distances.front()+1)) {
         num -= distances.front() + 1; 
         distances.pop();
@@ -270,7 +236,6 @@ void FeatureGenerator::pos_queue_pop(uint16_t num) {
     if (distances.empty()) { 
         counter -= num; 
     } else {
-        // since distances is not empty, the second condition of the while loop must be false (i.e. num <(distances.front()+1))
         distances.front() -= num;
     }
 
@@ -283,60 +248,55 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
     std::vector<segment*> non_label_seqs;
     non_label_seqs.reserve(segments.size());
 
-    segment& target = segments[target_index]; // get the best insertion segment
+    segment& target = segments[target_index];
 
     std::unordered_map<uint32_t, PosInfo> target_positions[target.sequence.size()];
     
     std::vector<std::unordered_map<uint32_t, PosInfo>> ins_positions[target.sequence.size()+1];
-    
-    // stores labels of the target sequence. By default all gaps
-    uint8_t target_positions_labels[target.sequence.size()];  
+    uint8_t target_positions_labels[target.sequence.size()];
     for (unsigned int i = 0; i < target.sequence.size(); i ++) {
         target_positions_labels[i] = ENCODED_BASES[Bases::GAP];
     }
     
-    // stores the labels aligned to the positions where the target has gaps after aligning
-    std::vector<uint8_t> ins_positions_labels[target.sequence.size()+1];    
+    std::vector<uint8_t> ins_positions_labels[target.sequence.size()+1];
     
     int total_ins_pos = 0;
     for (auto& s : segments) {
-        if (s.index != LABEL_SEQ_ID) non_label_seqs.push_back(&s); // if it is not ground truth
-        if (s.index != target.index) { // if it is not the best insertion segment (might be ground truth)
-            // calculate the edit distance between this segment and the best insertion segment (align this segment to the best insertion segment)
+        if (s.index != LABEL_SEQ_ID) non_label_seqs.push_back(&s);
+        if (s.index != target.index) {
             EdlibAlignResult result = edlibAlign(s.sequence.c_str(), s.sequence.size(), target.sequence.c_str(),
-                    target.sequence.size(), edlibNewAlignConfig(-1, EDLIB_MODE_NW, EDLIB_TASK_PATH, NULL, 0));
-
-            int ref_pos = -1; // pointing to before next to read ref base
-            int query_pos = -1; // pointing to before next to read query base
-            unsigned int ins_index = 0; // index of next insertion, 0-based
+                    target.sequence.size(), edlibNewAlignConfig(-1, EDLIB_MODE_NW, EDLIB_TASK_PATH, NULL, 0)); 
+            int ref_pos = -1;
+            int query_pos = -1;
+            unsigned int ins_index = 0;
             char char_at_pos;
             Bases base_at_pos;
             for (int i = 0; i < result.alignmentLength; i++) {
                 switch (result.alignment[i]) {
                     case 0: // match
-                        ins_index = 0;	      
-                        char_at_pos = s.sequence[++query_pos]; // s is the segment being aligned to target
+                        ins_index = 0;
+                        char_at_pos = s.sequence[++query_pos];
                         base_at_pos = char_to_base(char_at_pos);
                         ref_pos++;
-                        if (s.index == LABEL_SEQ_ID) { // if this segment is the ground truth, add it to the label
+                        if (s.index == LABEL_SEQ_ID) {
                             target_positions_labels[ref_pos] = char_to_forward_int(char_at_pos);
-                        } else { // else it is just an insertion segment (not target)
-                            target_positions[ref_pos].emplace(s.index, PosInfo(base_at_pos)); 
-                            // insertion segment index = read_id, base
+                        } else { // else it is just an insertion segment (not target, not ground truth)
+                            target_positions[ref_pos].emplace(s.index, PosInfo(base_at_pos, s.mq));
                         }
                         break;
-                    case 1: // insertion [has base on insertion segment, del on target]
-                        char_at_pos = s.sequence[++query_pos]; // get the segment's base
+                    case 1: // insertion [has base on insertion segment s, del on target]
+                        char_at_pos = s.sequence[++query_pos];
                         base_at_pos = char_to_base(char_at_pos);
-                        if (ins_positions[ref_pos+1].size() < ins_index + 1) { // if not enough maps to record bases in that position
+                        // store the insertion segment
+                        if (ins_positions[ref_pos+1].size() < ins_index + 1) { // if not enough maps to record sequence at that position
                             ins_positions[ref_pos+1].push_back(std::unordered_map<uint32_t, PosInfo>{});
                             ins_positions_labels[ref_pos+1].push_back(ENCODED_BASES[Bases::GAP]);
                             total_ins_pos++;
                         }
-                        if (s.index == LABEL_SEQ_ID) { // if this segment is the ground truth
+                        if (s.index == LABEL_SEQ_ID) {
                             ins_positions_labels[ref_pos+1][ins_index] = char_to_forward_int(char_at_pos);
                         } else {
-                            ins_positions[ref_pos+1][ins_index].emplace(s.index, PosInfo(base_at_pos));
+                            ins_positions[ref_pos+1][ins_index].emplace(s.index, PosInfo(base_at_pos, s.mq));
                         }
                         ins_index++;
                         break;
@@ -344,40 +304,38 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
                         ins_index = 0;
                         ref_pos++;
                         break;
-                    case 3: // mismatch
+                    case 3: // mismatch, same as match
                         ins_index = 0; 
                         char_at_pos = s.sequence[++query_pos];
                         base_at_pos = char_to_base(char_at_pos);
                         ref_pos++;
-                        if (s.index == LABEL_SEQ_ID) { // if this segment is the ground truth
+                        if (s.index == LABEL_SEQ_ID) {
                             target_positions_labels[ref_pos] = char_to_forward_int(char_at_pos);
                         } else {
-                            target_positions[ref_pos].emplace(s.index, PosInfo(base_at_pos));
+                            target_positions[ref_pos].emplace(s.index, PosInfo(base_at_pos, s.mq));
                         }
                         break;
                     default:
-                        std::cout << "Uknown alignment result!\n";
+                        std::cout << "Unknown alignment result!\n";
                 }
             }
             edlibFreeAlignResult(result); // cleaning
         } else { // if it is target, also might be the ground truth
-            // record bases on the target
             for (unsigned int i = 0; i < s.sequence.size(); i++) {
                 const char char_at_pos = s.sequence[i];
                 Bases base_at_pos = char_to_base(char_at_pos);               
                 if (s.index == LABEL_SEQ_ID) {
                     target_positions_labels[i] = char_to_forward_int(char_at_pos);
                 } else {
-                    target_positions[i].emplace(s.index, PosInfo(base_at_pos));
+                    target_positions[i].emplace(s.index, PosInfo(base_at_pos, s.mq));
                 }
             }
         }
     }
-  
-    uint16_t pos_counts[non_label_seqs.size()] = {0}; 
+    // saved all segments into non_lalbels_seqs, target_positions, ins_positions, target_posisions_labels and ins_positions_labels
     
     pos_index_t count = 1;
-    // correspond to positions before the first position of target before aligning
+    // insertions before the first position of target
     for (unsigned int i = 0; i < ins_positions[0].size(); i++) {
         auto& map = ins_positions[0][i];
         auto index = std::pair<pos_index_t, pos_index_t>(base_index, count);
@@ -387,27 +345,23 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
         for (uint16_t k = 0; k < non_label_seqs.size(); k++) {
             auto& s = non_label_seqs[k];
             if (map.find(s->index) == map.end()) {
-                map.emplace(s->index, PosInfo(Bases::GAP));
-
+                map.emplace(s->index, PosInfo(Bases::GAP, s->mq));
             }
         }
         for (auto& s: no_ins_reads) { 
-            map.emplace(s.index, PosInfo(Bases::GAP));
+            map.emplace(s.index, PosInfo(Bases::GAP, s.mq));
         }
         for (auto& pair: map) {
-            auto b = pair.second.base;
-            increment_base_count(index, b);  
-
+            increment_base_count(index, pair.second);
         }
-
         align_info[index] = map;
         if (has_labels) {
-            labels_info[index] = ins_positions_labels[0][i]; 
+            labels_info[index] = ins_positions_labels[0][i];
         }
         pos_queue_push(index);
     }
 
-    // correspond to positions on target before aligning, and insertions after them(the inner loop)
+    // target sequence before aligning, and insertions after target (the inner loop)
     for (unsigned int i = 0; i < target.sequence.size(); i++) {
         auto index = std::pair<pos_index_t, pos_index_t>(base_index, count);
 
@@ -416,18 +370,15 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
         for (uint16_t k = 0 ; k < non_label_seqs.size(); k++) {
             auto& s = non_label_seqs[k];
             if (target_positions[i].find(s->index) == target_positions[i].end()) {
-                target_positions[i].emplace(s->index, PosInfo(Bases::GAP));
+                target_positions[i].emplace(s->index, PosInfo(Bases::GAP, s->mq));
             }
         }
         for (auto& s: no_ins_reads) {
-            target_positions[i].emplace(s.index, PosInfo(Bases::GAP));
+            target_positions[i].emplace(s.index, PosInfo(Bases::GAP, s.mq));
         }
         for (auto& pair: target_positions[i]) {
-            auto b = pair.second.base;
-            increment_base_count(index, b);  
-
+            increment_base_count(index, pair.second);  
         }
-
 
         align_info[index] = target_positions[i];
         pos_queue_push(index); 
@@ -444,17 +395,14 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
             for (uint16_t k = 0; k< non_label_seqs.size(); k++) {
                 auto& s = non_label_seqs[k];
                 if (map.find(s->index) == map.end()) {
-                    map.emplace(s->index, PosInfo(Bases::GAP));
+                    map.emplace(s->index, PosInfo(Bases::GAP, s->mq));
                 }
             }
             for (auto& s: no_ins_reads) {
-                map.emplace(s.index, PosInfo(Bases::GAP));
-
+                map.emplace(s.index, PosInfo(Bases::GAP, s.mq));
             }
             for (auto& pair: map) {
-                auto b = pair.second.base;
-                increment_base_count(index, b);  
-
+                increment_base_count(index, pair.second);  
             }
 
             align_info[index] = map;
@@ -463,10 +411,10 @@ void FeatureGenerator::align_to_target(pos_index_t base_index, std::vector<segme
             }
             pos_queue_push(index);
         }
-    } 
+    }
 }
 
-int FeatureGenerator::find_center(std::vector<segment>& segments) { // find center of insertion segments
+int FeatureGenerator::find_center(std::vector<segment>& segments) {
     int dists[segments.size()]{0}; 
     for (unsigned int i = 0; i < segments.size(); i++) { 
         for (unsigned int j = i + 1; j < segments.size(); j++) { 
@@ -485,11 +433,11 @@ int FeatureGenerator::find_center(std::vector<segment>& segments) { // find cent
             best_pos_index = i;
         }
     }
-    return best_pos_index;    
+    return best_pos_index;
 
 }
 
-int FeatureGenerator::find_longest(std::vector<segment>& segments) { // finds the longest segment
+int FeatureGenerator::find_longest(std::vector<segment>& segments) {
     int best_index = 0;
     int highest_len = 0;
     for (int i = 0; i < segments.size(); i++) {
@@ -519,20 +467,20 @@ void FeatureGenerator::align_ins_center(pos_index_t base_index, std::vector<segm
 
 }
 
-std::unique_ptr<Data> FeatureGenerator::generate_features() {   
+std::unique_ptr<Data> FeatureGenerator::generate_features() {
     npy_intp dims[2]; // dimensions of X1 (2d)
     npy_intp dims2[2]; // dimensions of X2 (2d)
-    npy_intp dims3[2]; // dimentions of X3 (1d)
+    npy_intp dims3[2]; // x3 // dimentions of X3 (1d)
     npy_intp labels_dim[1]; // dimensions of labels (1d)
-    srand(49);
     labels_dim[0] = dimensions[1]; // labels_dim[0] = S
     for (int i = 0; i < 2; i++) {
         dims[i] = dimensions[i]; // dimensions[0] = R, dimensions[1] = S
         dims2[i] = dimensions2[i]; // dimensions2[0] = 5, dimensions2[1] = S
-        dims3[i] = dimensions3[i]; // dimensions3[0] = 1, dimensions3[1] = S
+        dims3[i] = dimensions3[i]; // x3 // dimensions3[0] = 1, dimensions3[1] = S
     }
- 
-    auto data = std::unique_ptr<Data>(new Data()); // positions, X, Y, X2, X3
+    unsigned seed = 42;
+    std::mt19937 g (seed); 
+    auto data = std::unique_ptr<Data>(new Data()); // positions, X, Y, X2 // X3
     
     // for each position in draft
     while (pileup_iter->has_next()) {
@@ -548,7 +496,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
         if (has_labels) {
             std::pair<pos_index_t, pos_index_t> index {rpos, 0};
             labels_info[index] = labels[index];
-            pos_index_t ins_count = 1; // check if there is any insertion (bases present in truth but not in draft)
+            pos_index_t ins_count = 1;
             index = std::make_pair(rpos, ins_count); // first insertion index: (rpos, 1)
             auto found = labels.find(index);
             while (found != labels.end()) { 
@@ -563,19 +511,23 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
         }
 
 
-        if (s.size() > 0) { // the draft is wrong, truth has a segment not present in draft
+        if (s.size() > 0) { // at this position, the draft is wrong, truth has a segment not present in draft
             ins_segments.emplace_back(std::move(s), LABEL_SEQ_ID); // LABEL_SEQ_ID = -1
         } // not gonna happen in inference mode, only training
 
-        // now start from (rpos,0) again
+        // now start from (rpos,0) again, check every rpos, so next one will be (rpos+1,0)
         std::pair<pos_index_t, pos_index_t> base_index(rpos, 0);
-
+        uint32_t num_low_mq = 0;
         std::uint32_t ins_count = 0;
 
         // time to check each read at this position
         while(column->has_next()) { // a column is made up of bases from many reads at one position
             auto r = column->next(); // column -> next() goes down the column of bases, r is one of the reads in this column 
             if (r->is_refskip()) continue;
+            if (r->mqual() < 10) {
+                if (num_low_mq >= 100) continue;
+                num_low_mq++; // reads with mapQ < 10 are low_mq reads, if a column has more than 100 low_mq reads then skip this column
+            }
             if (align_bounds.find(r->query_id()) == align_bounds.end()) {
                 align_bounds.emplace(r->query_id(), std::make_pair(r->ref_start(), r->ref_end()));
             }
@@ -583,14 +535,15 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             
             if (r->is_del()) {
                 // DELETION
-                align_info[base_index].emplace(r->query_id(), PosInfo(Bases::GAP));
-                // maps an index (key A) to another map B (value A), which maps the query id (key B) to the base (value B).
-                increment_base_count(base_index, Bases::GAP);
+                auto pos_info = PosInfo(Bases::GAP, r->mqual());
+                align_info[base_index].emplace(r->query_id(), pos_info);
+                increment_base_count(base_index, pos_info);
             } else {
                 // POSITION
-                auto qbase = r->qbase(0); // get query base
-                align_info[base_index].emplace(r->query_id(), PosInfo(qbase));
-                increment_base_count(base_index, qbase);
+                auto qbase = r->qbase(0);
+                auto pos_info = PosInfo(qbase, r->mqual());
+                align_info[base_index].emplace(r->query_id(), pos_info);
+                increment_base_count(base_index, pos_info);
                 // INSERTION
                 if (r-> indel() > 0) {
                     std::string s;
@@ -605,9 +558,10 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
                     no_ins_reads.emplace_back("", r->query_id(), r->mqual());
                 }
            }
-        } // done with all the reads at one position
+        } // done with all the reads at one draft position
 
         pos_queue_push(base_index); // this base_index is (rpos,0)
+        // push this index into pos_queue and check if this position is uncertain
 
         if (ins_count > 0) { // at this position, there exists at least one read with insertion
             //align_ins_longest(rpos, ins_segments, no_ins_reads); // use align_ins_center
@@ -615,49 +569,110 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
         }
 
         //BUILD FEATURE MATRIX
+        // enter this while loop after adding one window (dimension[1] positions) to pos_queue
         while (pos_queue.size() >= dimensions[1]) {
             if (distances.empty())  {
-                // if all are certain, remove most of positions in pos_queue 
+                // if all are certain, remove 25% of positions in pos_queue 
                 // only keep 75% of window size
                 pos_queue_pop(pos_queue.size() - dimensions[1]/4 * 3);
                 continue;
                 
-            } else if (distances.front() >= dimensions[1]) { // the first certain segment is larger than window size
-                uint16_t a = distances.front() - dimensions[1]/4 * 3; // certain segment length - 75% window size
+            } else if (distances.front() >= dimensions[1]) {
+                uint16_t a = distances.front() - dimensions[1]/4 * 3;
                 uint16_t b = pos_queue.size();
                 pos_queue_pop(std::min(a, b));
                 continue;
-            } 
+            }
+            struct id_mq {
+                uint32_t id;
+                uint8_t mq;
+                id_mq(uint32_t id, uint8_t mq) : id(id), mq(mq) {}
+            };
+            struct comp {
+                bool operator() (const id_mq& lhs, const id_mq& rhs) {
+                    return lhs.id < rhs.id; // sorts elements by their index
+                }
+            };
 
-            std::set<uint32_t> valid_aligns;
+            std::set<id_mq, comp> valid_aligns;
             const auto it = pos_queue.begin();
 
             for (auto s = 0; s < dimensions[1]; s++) {    
                 auto curr = it + s;
                 
                 for (auto& align : align_info[*curr]) {
-                    if (align.second.base != Bases::UNKNOWN) {
-                        valid_aligns.emplace(align.first);
+                    if (align.second.base != Bases::UNKNOWN) { // the read does not have unknown base
+                        valid_aligns.emplace(align.first, align.second.mq); // align.first = index, align.second = PosInfo, align.second.mq = mapq
                     }
                 }
             }
-            std::vector<uint32_t> valid(valid_aligns.begin(), valid_aligns.end());
-           
-            int valid_size = valid.size();
-            // when number of valid reads < threshold, then add draft base as reads for x times (comment this block off later)
-            //int num_draft = REF_ROWS;
-            //if(valid_size < 3) num_draft = 15;
 
-            int ref_rows_temp = REF_ROWS;
-            if (valid_size == 0) ref_rows_temp = dimensions[0]; // all rows use draft
+           std::vector<id_mq> valid(valid_aligns.begin(), valid_aligns.end());
+            
+            uint32_t valid_size = valid.size();
+            std::uint32_t sum = 0;
+            for (auto x : valid) {
+                sum += x.mq;
+            }
+            double avg = (double) sum / valid_size;
+            struct alias {
+                std::uint32_t idx1;
+                std::uint32_t idx2;
+                double share1;
+                double share2;
+                alias(std::uint32_t idx1, std::uint32_t idx2, double share1, double share2) : idx1(idx1), idx2(idx2), share1(share1), share2(share2) {}
+            };
+            std::vector<alias> done;
+            done.reserve(valid_size);
+            std::vector<std::pair<std::uint32_t, double>> large;
+            large.reserve(valid_size);
+            std::vector<std::pair<std::uint32_t, double>> small;
+            small.reserve(valid_size);
+            for (std::uint32_t i = 0; i < valid_size; i++) {
+                double value = valid[i].mq;
+                if (value == avg) {
+                    done.emplace_back(i, i, avg, avg);
+                } else if (value < avg) {
+                    small.emplace_back(i, value);
+                } else {
+                    large.emplace_back(i, value);
+                }
+            }
+            while (!large.empty() && !small.empty()) {
+                auto large_one = large.back();
+                auto small_one = small.back();
+                large.pop_back();
+                small.pop_back();
+                double diff = avg -  small_one.second;
+                done.emplace_back(large_one.first, small_one.first, diff, small_one.second);
+                large_one.second -= diff;
+                if (large_one.second == avg) {
+                    done.emplace_back(large_one.first, large_one.first, large_one.second, large_one.second);
+                } else if (large_one.second < avg) {
+                    small.push_back(large_one);
+                } else {
+                    large.push_back(large_one);
+                }
+            }
+            if (!large.empty()) {
+                for (auto& x : large) {
+                    done.emplace_back(x.first, x.first, avg, avg);            
+                }
+            } else if (!small.empty()) {
+                for (auto& x: small) {
+                    done.emplace_back(x.first, x.first, avg, avg);
+                }
+            }
+            std::uniform_real_distribution<double> dist (0.0, (double) sum);
+
 
             auto X = PyArray_SimpleNew(2, dims, NPY_UINT8);
-            auto X2 = PyArray_SimpleNew(2, dims2, NPY_UINT16);
+            auto X2 = PyArray_SimpleNew(2, dims2, NPY_UINT32);
             auto X3 = PyArray_SimpleNew(2, dims3, NPY_FLOAT);
             auto Y = PyArray_SimpleNew(1, labels_dim, NPY_UINT8);
             
             uint8_t* value_ptr;
-            uint16_t *value_ptr_16;
+            uint32_t *value_ptr_32;
             float* value_ptr_float;
 
             // First handle assembly (REF_ROWS)
@@ -667,7 +682,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
                 if (curr->second != 0) value = ENCODED_BASES[Bases::GAP];
                 else value = ENCODED_BASES[get_base(draft[curr->first])];
 
-                for (int r = 0; r < ref_rows_temp; r++) {
+                for (int r = 0; r < REF_ROWS; r++) {
                     value_ptr = (uint8_t*) PyArray_GETPTR2(X, r, s);
                     *value_ptr = value; // Forward strand - no +6
                 }
@@ -677,36 +692,50 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
                 auto curr = it + s;
                 auto& pos_stats = stats_info[*curr];
 
-                value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 0, s);
-                *value_ptr_16 = pos_stats.n_GAP;
-                value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 1, s);
-                *value_ptr_16 = pos_stats.n_A;
-                value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 2, s);
-                *value_ptr_16 = pos_stats.n_C;
-                value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 3, s);
-                *value_ptr_16 = pos_stats.n_G;
-                value_ptr_16 = (uint16_t*) PyArray_GETPTR2(X2, 4, s);
-                *value_ptr_16 = pos_stats.n_T;
+                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 0, s);
+                *value_ptr_32 = pos_stats.n_GAP;
+                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 1, s);
+                *value_ptr_32 = pos_stats.n_A;
+                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 2, s);
+                *value_ptr_32 = pos_stats.n_C;
+                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 3, s);
+                *value_ptr_32 = pos_stats.n_G;
+                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 4, s);
+                *value_ptr_32 = pos_stats.n_T;
 
+                // normalized_median_cov // x3
                 value_ptr_float = (float*) PyArray_GETPTR2(X3, 0, s);
-            
+                
                 if (curr->second == 0) {
                     *value_ptr_float = pos_stats.normalized_cov;
     
                 } else {
                     auto& stats = stats_info[std::make_pair(curr->first, 0)];
                     *value_ptr_float = stats.normalized_cov;
-                }
+                } // x3
                 
             }
 
-            for (int r = ref_rows_temp; r < dimensions[0]; r++) {
+            // fill up X
+            for (int r = REF_ROWS; r < dimensions[0]; r++) {
 
                 uint8_t base;
-                auto random_n = rand();
-                auto random_num = random_n  % valid_size;
 
-                uint32_t query_id = valid[random_num];
+                double value = dist(g);
+                uint16_t idx = value/avg;
+                auto& chosen = done[idx];
+                uint32_t random_num;
+
+                if (chosen.idx1 == chosen.idx2) {
+                    random_num = chosen.idx1;
+                } else {
+                    if (value > idx * avg + chosen.share1) {
+                        random_num = chosen.idx2;
+                    } else {
+                        random_num = chosen.idx1;
+                    }
+                }
+                uint32_t query_id = valid[random_num].id;
 
                 auto& fwd = strand[query_id];
 
@@ -729,9 +758,7 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
 
                     value_ptr = (uint8_t*) PyArray_GETPTR2(X, r, s);
                     *value_ptr = fwd ? base : (base + 6);
-
                 }
-
             }
 
             if (has_labels) {
@@ -745,10 +772,10 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             data->X.push_back(X);
             data->X2.push_back(X2);
             data->Y.push_back(Y);
-            data->X3.push_back(X3);
+            data->X3.push_back(X3); // x3
             data->positions.emplace_back(pos_queue.begin(), pos_queue.begin() + dimensions[1]);
             pos_queue_pop(WINDOW);
         }
-    } 
+    }
     return data;
 }

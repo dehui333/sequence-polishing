@@ -31,7 +31,7 @@ extern "C" {
         return status;
     }
 
-    int iter_bam2(void* data, bam1_t* b) {
+    int iter_bam2(void* data, bam1_t* b) { // includes secondary alignments
         int status;
         PileupData* plp_data = (PileupData*) data;
 
@@ -108,7 +108,6 @@ std::unique_ptr<PositionIterator> BAMFile::pileup(const std::string& region, boo
     }
     std::unique_ptr<__bam_mplp_t, decltype(&bam_mplp_destroy)> mplp_iter(mplp, bam_mplp_destroy);
 
-    // Pointer to data array for one position
     std::shared_ptr<const bam_pileup1_t*> pileup(const_cast<const bam_pileup1_t**>(new bam_pileup1_t*));
 
     // Region info

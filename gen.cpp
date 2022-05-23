@@ -14,7 +14,6 @@
 struct cov_info {
     uint16_t median = 0;
     uint16_t mad = 0;
-    
 };
 
 static std::unordered_map<std::string, cov_info> contig_cov_info;
@@ -24,7 +23,7 @@ static PyObject* initialize_cpp(PyObject *self, PyObject *args) {
     char* file_name; // reads to draft bam file
 
     // expects file_name, list of contigs in the draft, and lengths
-    if (!PyArg_ParseTuple(args, "sOO", &file_name, &contig_names, &contig_lens)) return NULL; 
+    if (!PyArg_ParseTuple(args, "sOO", &file_name, &contig_names, &contig_lens)) return NULL;
 
     if (!PyList_Check(contig_names) || !PyList_Check(contig_lens)) return NULL;
     if (PyList_Size(contig_names) != PyList_Size(contig_lens)) return NULL;
@@ -60,12 +59,12 @@ static PyObject* initialize_cpp(PyObject *self, PyObject *args) {
         total_len += l;
     }
     auto bam = readBAM(file_name);
-    for (uint16_t contig_idx = 0; contig_idx < num_contigs; contig_idx++) {
+    for (uint16_t contig_idx = 0; contig_idx < num_contigs; contig_idx++) { // for each contig
         std::string region_string = contigs[contig_idx] + ':';
-        auto contig_pileup = bam->pileup(region_string.c_str(), true);        
+        auto contig_pileup = bam->pileup(region_string.c_str(), true); // pileup data of this region
         uint32_t i = 0;
         uint32_t len = lens[contig_idx];
-        uint16_t* coverages = new uint16_t[len];
+        uint16_t* coverages = new uint16_t[len]; // coverage of each pos in this contig
         uint16_t* absolute_deviations = new uint16_t[len];
         while (contig_pileup->has_next()) {
             auto column = contig_pileup->next();
@@ -77,7 +76,7 @@ static PyObject* initialize_cpp(PyObject *self, PyObject *args) {
         uint16_t median_coverage = 0;
         uint16_t MAD = 0;
 
-        std::sort(coverages, coverages + len);
+        std::sort(coverages, coverages + len); // coverages is a pointer, so coverages itself is the index of the first element, coverages + len is the index of the last element
     
         if (len % 2 == 0) {
             median_coverage = (coverages[len/2] + coverages[len/2-1])/2; 
@@ -104,10 +103,6 @@ static PyObject* initialize_cpp(PyObject *self, PyObject *args) {
         delete[] absolute_deviations;
 
     }
-
-    /*for (auto& p:contig_cov_info) {
-        std::cout << p.first << " median " << p.second.median << " mad " << p.second.mad << std::endl;
-    }*/
       
     Py_INCREF(Py_None);
     return Py_None;
@@ -125,11 +120,11 @@ static PyObject* generate_features_cpp(PyObject *self, PyObject *args) {
     if (!PyArg_ParseTuple(args, "sssO", &filename, &ref, &region, &dict)) return NULL;
     
     std::string contig_name;
-    for (uint16_t i = 0; i < strlen(region); i++) {
+    for (uint16_t i = 0; i < strlen(region); i++) { // process region string to get contig name
         if (region[i] == ':') break;
         contig_name.push_back(region[i]);
     }
-    auto& s = contig_cov_info[contig_name];
+    auto& s = contig_cov_info[contig_name]; // get contig median and mad values
     
     FeatureGenerator feature_generator {filename, ref, region, dict, s.median, s.mad};
     auto result = feature_generator.generate_features();

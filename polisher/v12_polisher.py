@@ -232,7 +232,7 @@ def get_trainer_defaults() -> Dict[str, Any]:
 
     trainer_defaults = {
         'callbacks': [checkpoint_callback],
-        #'logger': WandbLogger(project='docker_roko', log_model='all', save_dir=os.getcwd()), # weights and biases
+        'logger': WandbLogger(project='docker_roko', log_model='all', save_dir=os.getcwd()), # weights and biases
         'strategy': DDPPlugin(find_unused_parameters = True) # 'strategy' parameter requires pytorch lightning v1.5 and above
     }
 
