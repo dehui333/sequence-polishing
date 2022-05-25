@@ -7,7 +7,7 @@ import argparse
 from torch.utils.data import Dataset, DataLoader
 import itertools
 import numpy as np
-from v6v7v8v9v10v11_polisher import Polisher
+from v6v7v8v9v10v11v12_polisher import Polisher
 #from GPUtil import showUtilization as gpu_usage
 #from numba import cuda
 

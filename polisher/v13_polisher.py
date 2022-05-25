@@ -14,11 +14,12 @@ from pytorch_lightning.loggers import WandbLogger
 from pytorch_lightning.plugins.training_type.ddp import DDPPlugin
 from pytorch_lightning.utilities.cli import LightningCLI
 
-from v6v7v8v9v10v11_evoformer import Evoformer, PositionalEncoding
-from roko_data_module import RokoDataModule
+from v6v7v8v9v10v11v12v13_evoformer import Evoformer, PositionalEncoding
+from v13_roko_data_module import RokoDataModule
 #import sys
 
 POSITIONAL_FEATURES = 5
+COV_FEATURES = 1
 READ_FEATURES = 12
 OUTPUT_CLASSES = 5
 MASK_CLASSES = 5
@@ -30,11 +31,13 @@ class GRUNetwork(nn.Module):
                  input_dim: int, # P
                  hidden_size: int,
                  n_layers: int,
-                 dropout: float = 0.0) -> None:
+                 dropout: float = 0.0,
+                 mode: str = 'pos_stat') -> None:
         super().__init__()
 
-        # pos_stat network
-        self.linear = nn.Linear(POSITIONAL_FEATURES, input_dim) # F P
+        # pos_stat network or cov network
+        self.linear_in_dim = POSITIONAL_FEATURES if mode == 'pos_stat' else COV_FEATURES
+        self.linear = nn.Linear(self.linear_in_dim, input_dim) # F P
         self.gru = nn.GRU(input_dim, 
                           hidden_size, 
                           num_layers = n_layers,
@@ -97,12 +100,14 @@ class Polisher(pl.LightningModule):
         self.save_hyperparameters()
 
         self.gru = GRUNetwork(gru_input_dim, gru_hidden_dim, gru_n_layers,
-                              gru_dropout)
+                              gru_dropout, mode = 'pos_stat')
+        self.gru2 = GRUNetwork(gru_input_dim, gru_hidden_dim, gru_n_layers,
+                              gru_dropout, mode = 'cov')
         self.attn = AttentionNetwork(attn_embed_dim, attn_n_heads,
                                      attn_n_blocks, attn_depth_prob,
                                      attn_pos_dropout)
         self.maskfc = nn.Linear(attn_embed_dim,MASK_CLASSES)
-        self.fc = nn.Linear(attn_embed_dim + 2 * gru_hidden_dim, OUTPUT_CLASSES)
+        self.fc = nn.Linear(attn_embed_dim + 2 * gru_hidden_dim + 2 * gru_hidden_dim, OUTPUT_CLASSES)
         
 
         # Metrics
@@ -111,25 +116,29 @@ class Polisher(pl.LightningModule):
 
     def forward(self, 
                 reads: torch.Tensor,
-                pos_stat: torch.Tensor) -> torch.Tensor: # reads B R S, pos_stat B S F
+                pos_stat: torch.Tensor,
+                cov: torch.Tensor) -> torch.Tensor: # reads B R S, pos_stat B S F, cov B S 1
         
         gru_output = self.gru(pos_stat) # B S 2H
+        gru_output2 = self.gru2(cov) # B S 2H
         attn_output = self.attn(reads) # B S E
-        output = torch.cat((attn_output[:,0], gru_output), 2) # B S (E+2H)
+        output = torch.cat((attn_output[:,0], gru_output, gru_output2), 2) # B S (E+2H+2H)
 
         return self.fc(output)
 
     def forward_train(self,
                       reads: torch.Tensor,
                       mask: torch.Tensor, 
-                      pos_stat: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]: # x B R S, mask B R S, pos_stat B S F
+                      pos_stat: torch.Tensor,
+                      cov: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]: # x B R S, mask B R S, pos_stat B S F, cov B S 1
         
         gru_output = self.gru(pos_stat) # B S 2H
-        attn_output = self.attn(reads) # B S E
+        gru_output2 = self.gru2(cov) # B S 2H
+        attn_output = self.attn(reads) # B R S E
         masked_output = self.maskfc(attn_output[mask]) # x[mask] = N_masked E --> self.fcmask(x[mask]) = N_masked 5
 
         # x (B R S E) -> take the first row of R dimension -> (B S E)
-        output = torch.cat((attn_output[:,0], gru_output), 2) # x B S E, pos_stat B S 2*H, output B S (E+2H)
+        output = torch.cat((attn_output[:,0], gru_output, gru_output2), 2) # x B S E, pos_stat B S 2*H, cov B S 2*H, output B S (E+2H+2H)
         
         # pass 'output' to linear layer --> self.fc(output) = BxSx5
         return self.fc(output), masked_output # B S 5 and N_masked 5
@@ -171,13 +180,14 @@ class Polisher(pl.LightningModule):
 
 
     def training_step(self, batch, batch_idx):
-        reads, labels, pos_stat = batch
+        reads, labels, pos_stat, cov = batch
         reads = reads.long() # x.size() = B R S, y.size() = B S
         labels = labels.long()
         pos_stat = pos_stat.transpose(1,2).float() # B F S --> transpose --> B S F
+        cov = cov.transpose(1,2).float() # B 1 S --> transpose --> B S 1
 
         mask_target, mask = self.read_masking(reads)
-        seq_logits, mask_logits = self.forward_train(reads, mask, pos_stat) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
+        seq_logits, mask_logits = self.forward_train(reads, mask, pos_stat, cov) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
         
         seq_logits = seq_logits.transpose(1,2)
         prediction_loss = self.cross_entropy_loss(seq_logits, labels)
@@ -196,12 +206,13 @@ class Polisher(pl.LightningModule):
         return overall_loss
 
     def validation_step(self, batch, batch_idx):
-        reads, labels, pos_stat = batch
+        reads, labels, pos_stat, cov = batch
         reads = reads.long()
         labels = labels.long()
         pos_stat = pos_stat.transpose(1,2).float()
+        cov = cov.transpose(1,2).float()
         
-        seq_logits = self.forward(reads,pos_stat)
+        seq_logits = self.forward(reads, pos_stat, cov)
         seq_logits = seq_logits.transpose(1,2) # logits = B C S
         loss = self.cross_entropy_loss(seq_logits, labels)
         self.log('val_loss', loss, prog_bar=True)
