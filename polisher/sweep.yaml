@@ -1,0 +1,23 @@
+program: /raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/v15_polisher.py
+name: try5
+method: bayes
+metric:
+  name: prediction_loss
+  goal: minimize
+parameters:
+  lr:
+    min: 0.00001
+    max: 0.1
+  alpha:
+    min: 0.00001
+    max: 0.1
+command:
+  - /usr/bin/env 
+  - python 
+  - /raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/v15_polisher.py
+  - fit
+  - "--config"
+  - "/raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/v15_config.yaml"
+early_terminate:
+  type: hyperband
+  min_iter: 10

@@ -1,0 +1,1 @@
+python -u polisher.py fit --config config.yaml > train_output.txt
