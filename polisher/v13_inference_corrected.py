@@ -77,13 +77,6 @@ class InferenceDataset(Dataset):
         X3 = group['cov'][p]
         position = group['positions'][p]
 
-        # del the print statements later: check if before and after are the same data types
-        #print("before",type(X2[0][0])) # before <class 'numpy.uint16'>
-
-        #X2 = X2.astype(np.int16)
-
-        #print("after",type(X2[0][0])) # after <class 'numpy.int16'>
-
         sample = (contig, position, X, np.nan_to_num(X2/np.sum(X2,axis=0)), X3)
         if self.transform:
             sample = self.transform(sample)
@@ -106,8 +99,6 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
     
     model = Polisher.load_from_checkpoint(checkpoint_path=model_path).to(device)
     model.freeze()
-    #model = RNN(IN_SIZE, HIDDEN_SIZE, NUM_LAYERS).to(device)
-    #model.load_state_dict(torch.load(model_path))
 
     if device.type == 'cuda' and GPU_NUM > 1:
         model = nn.DataParallel(model, list(range(GPU_NUM)))
@@ -126,12 +117,6 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
     with torch.no_grad():
         for i, batch in enumerate(dataloader):
             c, pos, x, x2, x3 = batch
-            #print("device used:", device)
-            #print(x.shape,x2.shape)
-            #torch.cuda.memory_summary(device = 6) # why doesnt this print out anything??
-            #print("Initial GPU Usage")
-            #gpu_usage()
-            # x, x2 = x.type(torch.cuda.LongTensor if device.type == 'cuda' else torch.LongTensor), x2.type(torch.cuda.FloatTensor if device.type == 'cuda' else torch.FloatTensor)
             x = x.to(device).long()
             x2 = x2.to(device).float()
             x3 = x3.to(device).float()
@@ -167,13 +152,10 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
 
                 aux_file.write(f'{contig}\n')
 
-                # after dropping positions
                 patch_start = first
                 patch_end = first
-                ###
 
                 for i, p in enumerate(pos_sorted): # for each predicted position
-                    # after dropping positions
                     if p[0] > patch_start or (p[0] == patch_start and p[1] > 0):
                         if p[1] == 0:
                             patch_end = p[0]
@@ -183,7 +165,6 @@ def infer(data, model_path, out, workers=0, batch_size=128, gpu='6'):
                         patch_start = patch_end
                     if p[1] == 0:
                         patch_start += 1
-                    ###
 
                     base, _ = values[p].most_common(1)[0]
                     # save the position and base to a file: 

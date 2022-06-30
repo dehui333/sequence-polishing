@@ -7,7 +7,6 @@ import math
 
 # stochastic depth linear decay
 def depth_prob(p_lowest: float, layer: int, n_layers: int) -> float:
-    #print(layer, p_lowest, n_layers)
     return 1 - layer / n_layers * (1 - p_lowest)
 
 class PositionalEncoding(nn.Module):
@@ -18,14 +17,7 @@ class PositionalEncoding(nn.Module):
         self.num_reads = num_reads
 
         position = torch.arange(max(seq_len, num_reads)).unsqueeze(1) # max(S, R) x 1
-        # torch.arange(max_len) returns tensor([ 0,  1,  2,  3,  4, ..., max_len-1])
-        # torch.unsqueeze(x, 1) returns tensor([[ 1],
-        #                                       [ 2],
-        #                                       [ 3],
-        #                                       [ 4],
-        #                                       [...]
-        #                                       [max_len-1]])
-        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model)) # torch.arange(start, end, step), math.log() is actually ln()
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
         pe = torch.zeros(max(seq_len, num_reads), d_model) # max(S, R) x E
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
@@ -37,12 +29,10 @@ class PositionalEncoding(nn.Module):
             x: Tensor, shape [batch_size, num_reads, seq_len, embedding_dim]
         """
         if mode == 'row':
-            x = x + self.pe.unsqueeze(1).expand(-1, self.seq_len, -1)[:self.num_reads] # after expanding: N S E, where N = max(S, R). take the first R entries of pe (R x E)
-        else: # if mode == 'col' # take the first S entries in pe (S x E)
+            x = x + self.pe.unsqueeze(1).expand(-1, self.seq_len, -1)[:self.num_reads]
+        else: # if mode == 'col'
             x = x + self.pe[:self.seq_len] # pe S x E
 
-        # if mode is row: self.pe[:self.num_reads].shape = self.pe[:x.size(1)].shape = num_reads x d_model = R E
-        # if mode is col: self.pe[:self.seq_len].shape = self.pe[:x.size(-2)].shape = seq_len x d_model = S E
         return self.dropout(x)
 
 class Evoformer(nn.Module):
@@ -67,7 +57,6 @@ class EvoformerBlock(nn.Module):
 
     def forward(self, msa_repr):
         if not self.training or torch.rand(1) <= self.p_keep:
-            #print("evo")
             # MSA track
             msa_repr = msa_repr + self.msa_row_att(msa_repr)
             msa_repr = msa_repr + self.msa_col_att(msa_repr)

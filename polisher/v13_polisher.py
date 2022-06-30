@@ -46,11 +46,8 @@ class GRUNetwork(nn.Module):
                           bidirectional=True)
 
     def forward(self, pos_stat: torch.Tensor) -> torch.Tensor:
-        #print("before nn: should be B S F, 8 90 5", pos_stat.shape)
         pos_stat = F.relu(self.linear(pos_stat)) # should be B S P
-        #print("after nn before gru: should be B S P, 8 90 128", pos_stat.shape)
         pos_stat, _ = self.gru(pos_stat) # B S 256=2*hidden_size
-        #print("after gru: should be B S 2*H, 8 90 256", pos_stat.shape)
         return pos_stat # BxNxSx2H
 
 
@@ -65,7 +62,7 @@ class AttentionNetwork(nn.Module):
         # Model
 
         self.embedding = nn.Embedding(READ_FEATURES, embed_dim)
-        self.pe = PositionalEncoding(embed_dim, pos_dropout, SEQ_LEN, NUM_R) # positional encoding for each base in sequences and for each sequence in reads
+        self.pe = PositionalEncoding(embed_dim, pos_dropout, SEQ_LEN, NUM_R)
         self.evoformer = Evoformer(msa_embedding_dim = embed_dim, 
                                    heads = nheads, 
                                    num_blocks = nblocks, 
@@ -140,7 +137,6 @@ class Polisher(pl.LightningModule):
         # x (B R S E) -> take the first row of R dimension -> (B S E)
         output = torch.cat((attn_output[:,0], gru_output, gru_output2), 2) # x B S E, pos_stat B S 2*H, cov B S 2*H, output B S (E+2H+2H)
         
-        # pass 'output' to linear layer --> self.fc(output) = BxSx5
         return self.fc(output), masked_output # B S 5 and N_masked 5
 
 
@@ -158,16 +154,16 @@ class Polisher(pl.LightningModule):
 
         # generate a boolean mask
         mask = torch.rand(reads.size(), 
-                          device = self.device) < self.hparams.reads_mask_prob # a tensor with true and false values, BxRxS
+                          device = self.device) < self.hparams.reads_mask_prob
 
         # a boolean tensor with true at positions where the values are 5 or 11
-        unknown = (reads == 5) | (reads == 11) # true if x at the position is 5 or 11  size = BxRxS
+        unknown = (reads == 5) | (reads == 11)
 
         # for each position, make masked positions false at places where x is 5 or 11
         mask &= ~unknown
 
         # save original values before masking
-        mask_target = torch.remainder(reads[mask],6) # size = number of elements masked (1 dimensional)
+        mask_target = torch.remainder(reads[mask],6)
 
         # apply masks, x is still B R S
         reads[mask] = torch.randint(0, 
@@ -181,10 +177,10 @@ class Polisher(pl.LightningModule):
 
     def training_step(self, batch, batch_idx):
         reads, labels, pos_stat, cov = batch
-        reads = reads.long() # x.size() = B R S, y.size() = B S
+        reads = reads.long()
         labels = labels.long()
-        pos_stat = pos_stat.transpose(1,2).float() # B F S --> transpose --> B S F
-        cov = cov.transpose(1,2).float() # B 1 S --> transpose --> B S 1
+        pos_stat = pos_stat.transpose(1,2).float()
+        cov = cov.transpose(1,2).float()
 
         mask_target, mask = self.read_masking(reads)
         seq_logits, mask_logits = self.forward_train(reads, mask, pos_stat, cov) # logits = B C S (B x 5 x S), y = B S, attn_out = N_masked x 5, before_masking = N_masked
@@ -226,8 +222,6 @@ def get_trainer_defaults() -> Dict[str, Any]:
     checkpoint_callback = ModelCheckpoint(
         monitor='val_acc',
         save_top_k=-1,
-        #dirpath="/scratch/model", # how do we get this dir from user argument? 
-        #Leave it unset in ModelCheckpoint instantiation, it will be set to trainer's weights_save_path or if it is also None then Trainer.default_root_dir.
         filename='{epoch}-{val_loss:.5f}-{val_acc:.5f}')
 
     trainer_defaults = {
