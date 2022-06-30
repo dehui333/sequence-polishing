@@ -1,0 +1,1 @@
+python -u /raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/v16_polisher.py fit --config /raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/v16_config.yaml > /raid/scratch/wuws/docker/v12_weighted_mapq/sequence-polishing/polisher/runs/train_v16_30_90_output.txt
