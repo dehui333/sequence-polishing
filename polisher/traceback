@@ -1,0 +1,65 @@
+Traceback (most recent call last):
+  File "v16_polisher.py", line 158, in <module>
+    cli_main()
+  File "v16_polisher.py", line 150, in cli_main
+    LightningCLI(
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/utilities/cli.py", line 564, in __init__
+    self._run_subcommand(self.subcommand)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/utilities/cli.py", line 835, in _run_subcommand
+    fn(**fn_kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 771, in fit
+    self._call_and_handle_interrupt(
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 722, in _call_and_handle_interrupt
+    return self.strategy.launcher.launch(trainer_fn, *args, trainer=self, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/strategies/launchers/subprocess_script.py", line 93, in launch
+    return function(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 812, in _fit_impl
+    results = self._run(model, ckpt_path=self.ckpt_path)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 1237, in _run
+    results = self._run_stage()
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 1324, in _run_stage
+    return self._run_train()
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 1346, in _run_train
+    self._run_sanity_check()
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 1414, in _run_sanity_check
+    val_loop.run()
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/loops/base.py", line 204, in run
+    self.advance(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/loops/dataloader/evaluation_loop.py", line 153, in advance
+    dl_outputs = self.epoch_loop.run(self._data_fetcher, dl_max_batches, kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/loops/base.py", line 204, in run
+    self.advance(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/loops/epoch/evaluation_epoch_loop.py", line 127, in advance
+    output = self._evaluation_step(**kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/loops/epoch/evaluation_epoch_loop.py", line 222, in _evaluation_step
+    output = self.trainer._call_strategy_hook("validation_step", *kwargs.values())
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/trainer.py", line 1766, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/strategies/ddp.py", line 350, in validation_step
+    return self.model(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torch/nn/parallel/distributed.py", line 886, in forward
+    output = self.module(*inputs[0], **kwargs[0])
+  File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/pytorch_lightning/overrides/base.py", line 93, in forward
+    return self.module.validation_step(*inputs, **kwargs)
+  File "v16_polisher.py", line 129, in validation_step
+    self.log('val_acc', self.val_accuracy(seq_logits, labels))
+  File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/metric.py", line 237, in forward
+    self._forward_cache = self._forward_reduce_state_update(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/metric.py", line 301, in _forward_reduce_state_update
+    self.update(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/metric.py", line 383, in wrapped_func
+    update(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/classification/accuracy.py", line 238, in update
+    tp, fp, tn, fn = _accuracy_update(
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/functional/classification/accuracy.py", line 107, in _accuracy_update
+    tp, fp, tn, fn = _stat_scores_update(
+  File "/usr/local/lib/python3.8/dist-packages/torchmetrics/functional/classification/stat_scores.py", line 172, in _stat_scores_update
+    raise ValueError(
+ValueError: When your inputs are multi-dimensional multi-class, you have to set the `mdmc_reduce` parameter
+

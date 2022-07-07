@@ -9,7 +9,7 @@ RUN \
     && apt install -yq --no-install-recommends \
         python3-all-dev python3-pip \
         build-essential \
-        libcurl4-gnutls-dev libssl-dev \
+        libcurl4-gnutls-dev libssl-dev libbz2-dev liblzma-dev \ 
     && pip install numpy pysam biopython h5py \
        torch==1.10.2 pytorch-lightning wandb jsonargparse docstring-parser \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -18,9 +18,9 @@ COPY . /roko
 
 RUN \
     cd /roko/Dependencies/htslib-1.9 \
-    && ./configure CFLAGS=-fpic --disable-bz2 --disable-lzma --without-libdeflate \
+    && ./configure CFLAGS=-fpic --without-libdeflate \
     && make \
-    && cd /roko \
+    && cd /roko \ 
     && python3 setup.py install
 
 

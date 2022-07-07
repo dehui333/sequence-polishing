@@ -1,8 +1,9 @@
 trainer:
-  gpus: [6,7]
+  gpus: [6, 7]
   precision: 16
   gradient_clip_val: 1.0
-  weights_save_path: /Roko
+  max_epochs: 20
+  weights_save_path: /Roko/checkpoints/v17
   val_check_interval: 0.2
 model:
   gru_input_dim: 128
@@ -11,8 +12,8 @@ model:
   gru_dropout: 0.0
   lr: 3e-4
 data:
-  data_dir: /mnt/projects/miles-wgs-wenshan/wuws_m/v12/v12_train
-  val_path: /mnt/projects/miles-wgs-wenshan/wuws_m/v12/v12_val
-  batch_size: 64
+  data_dir: /Roko/features/train
+  val_path: /Roko/features/val
+  batch_size: 128
   mem: False
   workers: 4

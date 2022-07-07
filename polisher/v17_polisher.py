@@ -65,9 +65,9 @@ class Polisher(pl.LightningModule):
 
         self.gru = GRUNetwork(gru_input_dim, gru_hidden_dim, gru_n_layers,
                               gru_dropout, mode = 'pos_stat')
-        self.gru2 = GRUNetwork(gru_input_dim, gru_hidden_dim, gru_n_layers,
-                              gru_dropout, mode = 'cov')
-        self.fc = nn.Linear(2 * gru_hidden_dim + 2 * gru_hidden_dim, OUTPUT_CLASSES)
+        #self.gru2 = GRUNetwork(gru_input_dim, gru_hidden_dim, gru_n_layers,
+        #                      gru_dropout, mode = 'cov')
+        self.fc = nn.Linear(2 * gru_hidden_dim, OUTPUT_CLASSES)
 
         # Metrics
         self.train_accuracy = torchmetrics.Accuracy(mdmc_average='global')
@@ -78,20 +78,15 @@ class Polisher(pl.LightningModule):
                 cov: torch.Tensor) -> torch.Tensor: # pos_stat B S F, cov B S 1
         
         gru_output = self.gru(pos_stat) # B S 2H
-        gru_output2 = self.gru2(cov) # B S 2H
-        output = torch.cat((gru_output, gru_output2), 2) # do not use attn
-        return self.fc(output)
+        return self.fc(gru_output)
 
     def forward_train(self,
                       pos_stat: torch.Tensor,
                       cov: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]: # pos_stat B S F, cov B S 1
         
         gru_output = self.gru(pos_stat) # B S 2H
-        gru_output2 = self.gru2(cov) # B S 2H
 
-        output = torch.cat((gru_output, gru_output2), 2)
-
-        return self.fc(output) # B S 5 and N_masked 5
+        return self.fc(gru_output) # B S 5 and N_masked 5
 
 
     def cross_entropy_loss(self, logits, labels):
@@ -117,6 +112,7 @@ class Polisher(pl.LightningModule):
         return prediction_loss
 
     def validation_step(self, batch, batch_idx):
+        
         _, labels, pos_stat, cov = batch
         labels = labels.long()
         pos_stat = pos_stat.transpose(1,2).float()

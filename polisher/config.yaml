@@ -1,0 +1,77 @@
+seed_everything: 42
+trainer:
+  logger: <pytorch_lightning.loggers.wandb.WandbLogger object at 0x7fde2aac1100>
+  checkpoint_callback: null
+  enable_checkpointing: true
+  callbacks: null
+  default_root_dir: null
+  gradient_clip_val: 1.0
+  gradient_clip_algorithm: null
+  process_position: 0
+  num_nodes: 1
+  num_processes: null
+  devices: null
+  gpus:
+  - 4
+  - 5
+  auto_select_gpus: false
+  tpu_cores: null
+  ipus: null
+  log_gpu_memory: null
+  progress_bar_refresh_rate: null
+  enable_progress_bar: true
+  overfit_batches: 0.0
+  track_grad_norm: -1
+  check_val_every_n_epoch: 1
+  fast_dev_run: false
+  accumulate_grad_batches: null
+  max_epochs: null
+  min_epochs: null
+  max_steps: -1
+  min_steps: null
+  max_time: null
+  limit_train_batches: null
+  limit_val_batches: null
+  limit_test_batches: null
+  limit_predict_batches: null
+  val_check_interval: 0.2
+  flush_logs_every_n_steps: null
+  log_every_n_steps: 50
+  accelerator: null
+  strategy: <pytorch_lightning.plugins.training_type.ddp.DDPPlugin object at 0x7fde2aac1070>
+  sync_batchnorm: false
+  precision: 16
+  enable_model_summary: true
+  weights_summary: top
+  weights_save_path: /Roko/checkpoints/v18
+  num_sanity_val_steps: 2
+  resume_from_checkpoint: null
+  profiler: null
+  benchmark: null
+  deterministic: null
+  reload_dataloaders_every_n_epochs: 0
+  auto_lr_find: false
+  replace_sampler_ddp: true
+  detect_anomaly: false
+  auto_scale_batch_size: false
+  prepare_data_per_node: null
+  plugins: null
+  amp_backend: native
+  amp_level: null
+  move_metrics_to_cpu: false
+  multiple_trainloader_mode: max_size_cycle
+  stochastic_weight_avg: false
+  terminate_on_nan: null
+model:
+  gru_input_dim: 128
+  gru_hidden_dim: 128
+  gru_n_layers: 2
+  gru_dropout: 0.0
+  lr: 0.0003
+data:
+  data_dir: /Roko/features/train
+  val_path: /Roko/features/val
+  batch_size: 128
+  mem: false
+  workers: 4
+ckpt_path: null
