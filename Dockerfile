@@ -18,7 +18,7 @@ COPY . /roko
 
 RUN \
     cd /roko/Dependencies/htslib-1.9 \
-    && ./configure CFLAGS=-fpic --without-libdeflate \
+    && ./configure CFLAGS=-fpic --without-libdeflate --disable-lzma --disable-bz2\
     && make \
     && cd /roko \ 
     && python3 setup.py install

@@ -4,7 +4,7 @@ from labels import *
 import argparse
 from multiprocessing import Pool
 import gen
-from v13_data import DataWriter
+from v12v13_data import DataWriter
 import numpy as np
 
 ENCODED_UNKNOWN = encoding[UNKNOWN]
@@ -118,7 +118,7 @@ def main():
             contig_names.append(pair[0])
             contig_lens.append(len(pair[1]))
                 
-    gen.initialize(args.X, contig_names, contig_lens) # x3
+    #gen.initialize(args.X, contig_names, contig_lens) # x3
         
 
     with DataWriter(args.o, inference) as data:

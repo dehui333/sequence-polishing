@@ -65,7 +65,7 @@ FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const 
     
     bam = readBAM(filename);
     // normalized_median_cov  // x3
-    auto pileup_inclusive = bam->pileup(region, true);
+    /*auto pileup_inclusive = bam->pileup(region, true);
     
     uint32_t i = 0;
     while (pileup_inclusive->has_next()) {
@@ -75,7 +75,7 @@ FeatureGenerator::FeatureGenerator(const char* filename, const char* ref, const 
         if (rpos >= pileup_inclusive->end()) break;
         auto& stat = stats_info[std::make_pair(rpos, 0)];
         stat.normalized_cov = (column->count() - (float) median) / mad;
-    } // x3
+    } // x3 */
 
     pileup_iter = bam->pileup(region);
     if (dict == Py_None) { 
