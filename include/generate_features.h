@@ -19,7 +19,7 @@ extern "C" {
 typedef uint32_t pos_index_t;
 
 constexpr int dimensions[] = {30, 90}; 
-constexpr int dimensions2[] = {5, 90};
+constexpr int dimensions2[] = {6, 90};
 constexpr int dimensions3[] = {1, 90}; // x3
 constexpr int WINDOW = dimensions[1] / 3;
 constexpr int REF_ROWS = 1; // ref_rows=1 to include draft in the feature

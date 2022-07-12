@@ -691,9 +691,17 @@ std::unique_ptr<Data> FeatureGenerator::generate_features() {
             for (auto s = 0; s < dimensions[1]; s++) {
                 auto curr = it + s;
                 auto& pos_stats = stats_info[*curr];
-
-                value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 0, s);
-                *value_ptr_32 = pos_stats.n_GAP;
+	        if (curr->second == 0) {	
+                    value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 0, s);
+                    *value_ptr_32 = pos_stats.n_GAP;
+		    value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 5, s);
+		    *value_ptr_32 = 0;
+		} else {
+		    value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 0, s);
+                    *value_ptr_32 = 0;
+		    value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 5, s);
+		    *value_ptr_32 = pos_stats.n_GAP;
+		}
                 value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 1, s);
                 *value_ptr_32 = pos_stats.n_A;
                 value_ptr_32 = (uint32_t*) PyArray_GETPTR2(X2, 2, s);
